@@ -24,8 +24,6 @@ import {
   DropdownMenuSeparator,
 } from "@/components/ui/dropdown-menu";
 
-// ─── Types & Config ───────────────────────────────────────────────────────────
-
 type Role = "customer" | "technician" | "admin";
 
 const ROLE_LABELS: Record<Role, string> = {
@@ -52,9 +50,7 @@ const NAV_LINKS = [
   { label: "About", href: "/about" },
 ];
 
-// ─── Navbar Component ─────────────────────────────────────────────────────────
-
-export default function Navbar() {
+const Navbar = () => {
   const pathname = usePathname();
   const router = useRouter();
   const { data: session } = useSession();
@@ -82,7 +78,6 @@ export default function Navbar() {
   return (
     <header className="sticky top-0 z-50 w-full border-b border-gray-200 bg-white/90 backdrop-blur-md shadow-sm">
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
-        {/* ── Logo ── */}
         <Link
           href="/"
           className="flex items-center gap-2 font-bold text-xl text-gray-900 hover:opacity-80 transition-opacity"
@@ -95,7 +90,6 @@ export default function Navbar() {
           </span>
         </Link>
 
-        {/* ── Desktop Nav Links ── */}
         <nav className="hidden md:flex items-center gap-1">
           {NAV_LINKS.map(({ label, href }) => {
             const isActive =
@@ -120,7 +114,6 @@ export default function Navbar() {
           })}
         </nav>
 
-        {/* ── Desktop Right Side ── */}
         <div className="hidden md:flex items-center gap-3">
           {user ? (
             <DropdownMenu>
@@ -140,7 +133,6 @@ export default function Navbar() {
               </DropdownMenuTrigger>
 
               <DropdownMenuContent align="end" className="w-56">
-                {/* User info */}
                 <DropdownMenuLabel className="pb-2">
                   <p className="text-sm font-semibold text-gray-900 truncate">
                     {user.name}
@@ -198,7 +190,6 @@ export default function Navbar() {
           )}
         </div>
 
-        {/* ── Mobile Hamburger ── */}
         <button
           className="flex md:hidden items-center justify-center rounded-md p-2 text-gray-600 hover:bg-gray-100 transition-colors"
           onClick={() => setMobileOpen((prev) => !prev)}
@@ -212,10 +203,8 @@ export default function Navbar() {
         </button>
       </div>
 
-      {/* ── Mobile Menu ── */}
       {mobileOpen && (
         <div className="md:hidden border-t border-gray-200 bg-white px-4 py-4 space-y-1">
-          {/* Nav Links */}
           {NAV_LINKS.map(({ label, href }) => {
             const isActive =
               pathname === href || (href !== "/" && pathname.startsWith(href));
@@ -239,7 +228,6 @@ export default function Navbar() {
           <div className="border-t border-gray-200 pt-3 mt-3">
             {user ? (
               <div className="space-y-1">
-                {/* User card */}
                 <div className="flex items-center gap-3 px-3 py-2 mb-2">
                   <Avatar size="default">
                     <AvatarImage
@@ -317,4 +305,6 @@ export default function Navbar() {
       )}
     </header>
   );
-}
+};
+
+export default Navbar;
