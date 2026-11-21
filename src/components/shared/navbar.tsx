@@ -19,7 +19,6 @@ import {
   DropdownMenu,
   DropdownMenuTrigger,
   DropdownMenuContent,
-  DropdownMenuLabel,
   DropdownMenuItem,
   DropdownMenuSeparator,
 } from "@/components/ui/dropdown-menu";
@@ -133,7 +132,7 @@ const Navbar = () => {
               </DropdownMenuTrigger>
 
               <DropdownMenuContent align="end" className="w-56">
-                <DropdownMenuLabel className="pb-2">
+                <div className="px-2.5 py-2">
                   <p className="text-sm font-semibold text-gray-900 truncate">
                     {user.name}
                   </p>
@@ -148,7 +147,7 @@ const Navbar = () => {
                   >
                     {ROLE_LABELS[role]}
                   </span>
-                </DropdownMenuLabel>
+                </div>
 
                 <DropdownMenuSeparator />
 
