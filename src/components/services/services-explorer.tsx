@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import { getPublicServices, type Service, type ServiceQuery } from "@/lib/api/services";
 
 const CATEGORIES = [
@@ -188,12 +189,12 @@ const ServicesExplorer = ({ initialCategory = "" }: { initialCategory?: string }
                   <span className="text-lg font-bold text-blue-600">
                     ${service.basePrice}
                   </span>
-                  <a
-                    href={`/sign-in?callbackUrl=/dashboard/customer/bookings?service=${service._id}`}
+                  <Link
+                    href={`/services/${service._id}`}
                     className="rounded-lg bg-blue-600 px-4 py-2 text-sm text-white hover:bg-blue-700"
                   >
-                    Book Now
-                  </a>
+                    View Details
+                  </Link>
                 </div>
               </div>
             </div>

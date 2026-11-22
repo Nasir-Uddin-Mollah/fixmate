@@ -99,3 +99,18 @@ export const getPublicServices = async (
 
   return (await response.json()) as ServiceListResponse;
 };
+
+export const getServiceById = async (id: string): Promise<Service | null> => {
+  const response = await fetch(
+    `${SERVER_URL}/api/services/${encodeURIComponent(id)}`,
+    { cache: "no-store" },
+  );
+
+  if (response.status === 404) return null;
+
+  if (!response.ok) {
+    throw new Error("Could not load this service. Please try again.");
+  }
+
+  return (await response.json()) as Service;
+};
