@@ -56,7 +56,7 @@ const MyServicesTable = () => {
   }, []);
 
   useEffect(() => {
-    void load();
+    void Promise.resolve().then(load);
   }, [load]);
 
   if (loading) {

@@ -22,7 +22,24 @@ export type Service = ServicePayload & {
   createdAt: string;
 };
 
-/** POST /api/services - create a service (technician only). */
+export type ServiceQuery = {
+  q?: string;
+  category?: string;
+  serviceMode?: string;
+  sort?: "newest" | "price_asc" | "price_desc" | "title";
+  page?: number;
+  limit?: number;
+};
+
+export type ServiceListResponse = {
+  services: Service[];
+  total: number;
+  page: number;
+  limit: number;
+  totalPages: number;
+};
+
+/** POST /api/services - create a service (technician only, JWT required). */
 export const createService = async (payload: ServicePayload) => {
   const token = await getJwtToken();
 
@@ -44,11 +61,10 @@ export const createService = async (payload: ServicePayload) => {
   return data;
 };
 
-/** GET /api/services - the signed-in technician's own services. */
 export const getMyServices = async (): Promise<Service[]> => {
   const token = await getJwtToken();
 
-  const response = await fetch(`${SERVER_URL}/api/services`, {
+  const response = await fetch(`${SERVER_URL}/api/services/my`, {
     headers: { Authorization: `Bearer ${token}` },
   });
 
@@ -57,4 +73,29 @@ export const getMyServices = async (): Promise<Service[]> => {
   }
 
   return (await response.json()) as Service[];
+};
+
+export const getPublicServices = async (
+  params: ServiceQuery = {},
+): Promise<ServiceListResponse> => {
+  const searchParams = new URLSearchParams();
+
+  if (params.q) searchParams.set("q", params.q);
+  if (params.category) searchParams.set("category", params.category);
+  if (params.serviceMode) searchParams.set("serviceMode", params.serviceMode);
+  if (params.sort) searchParams.set("sort", params.sort);
+  if (params.page) searchParams.set("page", String(params.page));
+  if (params.limit) searchParams.set("limit", String(params.limit));
+
+  const query = searchParams.toString();
+  const response = await fetch(
+    `${SERVER_URL}/api/services${query ? `?${query}` : ""}`,
+    { cache: "no-store" },
+  );
+
+  if (!response.ok) {
+    throw new Error("Could not load services. Please try again.");
+  }
+
+  return (await response.json()) as ServiceListResponse;
 };
