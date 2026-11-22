@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Image from "next/image";
 import {
   CheckCircle2Icon,
@@ -35,6 +35,37 @@ const SERVICE_MODES = ["Home Visit", "Shop Drop-off"] as const;
 
 type ServiceMode = (typeof SERVICE_MODES)[number];
 
+const IMGBB_API_KEY = process.env.NEXT_PUBLIC_IMGBB_API_KEY;
+
+/** Upload straight to ImgBB from the browser and return the hosted URL. */
+const uploadImage = async (file: File): Promise<string> => {
+  if (!IMGBB_API_KEY) {
+    throw new Error(
+      "ImgBB key missing. Add NEXT_PUBLIC_IMGBB_API_KEY to .env.local and restart the dev server.",
+    );
+  }
+
+  const formData = new FormData();
+  formData.append("image", file);
+
+  const response = await fetch(
+    `https://api.imgbb.com/1/upload?key=${encodeURIComponent(IMGBB_API_KEY)}`,
+    { method: "POST", body: formData },
+  );
+
+  const data = (await response.json()) as {
+    success?: boolean;
+    data?: { url?: string };
+    error?: { message?: string };
+  };
+
+  if (!data.success || !data.data?.url) {
+    throw new Error(data.error?.message ?? "Image upload failed.");
+  }
+
+  return data.data.url;
+};
+
 type FormState = {
   title: string;
   category: string;
@@ -66,38 +97,63 @@ const AddServiceForm = ({
 }) => {
   const [form, setForm] = useState<FormState>(INITIAL_FORM);
   const [errors, setErrors] = useState<FormErrors>({});
-  const [image, setImage] = useState<File | null>(null);
-  const [preview, setPreview] = useState<string | null>(null);
+  const [imageUrl, setImageUrl] = useState<string | null>(null);
+  const [imageName, setImageName] = useState<string | null>(null);
+  const [uploading, setUploading] = useState(false);
   const [submitting, setSubmitting] = useState(false);
-
-  useEffect(() => {
-    return () => {
-      if (preview) URL.revokeObjectURL(preview);
-    };
-  }, [preview]);
 
   const update = <K extends keyof FormState>(key: K, value: FormState[K]) => {
     setForm((current) => ({ ...current, [key]: value }));
     setErrors((current) => ({ ...current, [key]: undefined }));
   };
 
-  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileChange = async (
+    event: React.ChangeEvent<HTMLInputElement>,
+  ) => {
     const file = event.target.files?.[0];
     if (!file) return;
 
     if (!file.type.startsWith("image/")) {
-      setErrors((current) => ({ ...current, image: "Please choose an image file." }));
+      setErrors((current) => ({
+        ...current,
+        image: "Please choose an image file.",
+      }));
       return;
     }
     if (file.size > 5 * 1024 * 1024) {
-      setErrors((current) => ({ ...current, image: "Image must be smaller than 5 MB." }));
+      setErrors((current) => ({
+        ...current,
+        image: "Image must be smaller than 5 MB.",
+      }));
       return;
     }
 
-    if (preview) URL.revokeObjectURL(preview);
-    setImage(file);
-    setPreview(URL.createObjectURL(file));
+    setUploading(true);
+    setImageUrl(null);
+    setImageName(file.name);
     setErrors((current) => ({ ...current, image: undefined }));
+
+    try {
+      const url = await uploadImage(file);
+      setImageUrl(url);
+      toast.add({
+        title: "Image uploaded",
+        description: "Your service banner is ready.",
+        type: "success",
+      });
+    } catch (error) {
+      setImageName(null);
+      const message =
+        error instanceof Error ? error.message : "Image upload failed.";
+      setErrors((current) => ({ ...current, image: message }));
+      toast.add({
+        title: "Upload failed",
+        description: message,
+        type: "error",
+      });
+    } finally {
+      setUploading(false);
+    }
   };
 
   const validate = (): boolean => {
@@ -122,8 +178,8 @@ const AddServiceForm = ({
     if (!form.serviceArea.trim()) {
       next.serviceArea = "Please enter the area you cover.";
     }
-    if (!image) {
-      next.image = "A service image is required.";
+    if (!imageUrl) {
+      next.image = "Upload a service image first.";
     }
 
     setErrors(next);
@@ -132,7 +188,7 @@ const AddServiceForm = ({
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    if (!validate() || !image) return;
+    if (!validate() || !imageUrl) return;
 
     setSubmitting(true);
     toast.add({
@@ -144,7 +200,7 @@ const AddServiceForm = ({
     setSubmitting(false);
   };
 
-  const busy = submitting;
+  const busy = uploading || submitting;
 
   return (
     <form
@@ -153,7 +209,9 @@ const AddServiceForm = ({
     >
       <div className="space-y-6 rounded-xl border border-slate-200 bg-white p-5 shadow-sm sm:p-6">
         <div>
-          <h3 className="text-base font-semibold text-slate-900">Service details</h3>
+          <h3 className="text-base font-semibold text-slate-900">
+            Service details
+          </h3>
           <p className="mt-1 text-sm text-slate-500">
             Customers will see this information on your service card.
           </p>
@@ -169,7 +227,9 @@ const AddServiceForm = ({
               placeholder="e.g. iPhone Screen Replacement"
               aria-invalid={Boolean(errors.title)}
             />
-            {errors.title && <p className="text-xs text-red-600">{errors.title}</p>}
+            {errors.title && (
+              <p className="text-xs text-red-600">{errors.title}</p>
+            )}
           </div>
 
           <div className="space-y-1.5">
@@ -235,7 +295,9 @@ const AddServiceForm = ({
             <Input
               id="estimatedDuration"
               value={form.estimatedDuration}
-              onChange={(event) => update("estimatedDuration", event.target.value)}
+              onChange={(event) =>
+                update("estimatedDuration", event.target.value)
+              }
               placeholder="e.g. 2-3 hours"
               aria-invalid={Boolean(errors.estimatedDuration)}
             />
@@ -277,7 +339,9 @@ const AddServiceForm = ({
                   >
                     <span
                       className={`flex size-5 items-center justify-center rounded-full border ${
-                        selected ? "border-blue-600 bg-blue-600 text-white" : "border-slate-300"
+                        selected
+                          ? "border-blue-600 bg-blue-600 text-white"
+                          : "border-slate-300"
                       }`}
                     >
                       {selected && <CheckCircle2Icon className="size-3.5" />}
@@ -293,7 +357,9 @@ const AddServiceForm = ({
 
       <div className="space-y-6">
         <div className="rounded-xl border border-slate-200 bg-white p-5 shadow-sm">
-          <h3 className="text-base font-semibold text-slate-900">Service image</h3>
+          <h3 className="text-base font-semibold text-slate-900">
+            Service image
+          </h3>
           <p className="mt-1 text-sm text-slate-500">
             Upload a clear banner image (max 5 MB).
           </p>
@@ -302,10 +368,10 @@ const AddServiceForm = ({
             htmlFor="serviceImage"
             className="mt-4 flex cursor-pointer flex-col items-center justify-center rounded-xl border-2 border-dashed border-slate-300 bg-slate-50 px-4 py-8 text-center transition-colors hover:border-blue-400 hover:bg-blue-50/50"
           >
-            {preview ? (
+            {imageUrl ? (
               <Image
-                src={preview}
-                alt="Selected service preview"
+                src={imageUrl}
+                alt="Uploaded service preview"
                 width={480}
                 height={240}
                 unoptimized
@@ -315,9 +381,15 @@ const AddServiceForm = ({
               <ImagePlusIcon className="size-8 text-blue-500" />
             )}
             <span className="mt-3 text-sm font-medium text-slate-700">
-              {preview ? "Choose a different image" : "Click to upload"}
+              {uploading
+                ? "Uploading to ImgBB..."
+                : imageUrl
+                  ? "Change image"
+                  : "Click to upload"}
             </span>
-            <span className="mt-1 text-xs text-slate-400">PNG, JPG or WEBP</span>
+            <span className="mt-1 text-xs text-slate-400">
+              PNG, JPG or WEBP
+            </span>
             <input
               id="serviceImage"
               type="file"
@@ -326,9 +398,11 @@ const AddServiceForm = ({
               className="sr-only"
             />
           </label>
-          {errors.image && <p className="mt-2 text-xs text-red-600">{errors.image}</p>}
-          {image && (
-            <p className="mt-2 truncate text-xs text-slate-500">{image.name}</p>
+          {errors.image && (
+            <p className="mt-2 text-xs text-red-600">{errors.image}</p>
+          )}
+          {imageName && (
+            <p className="mt-2 truncate text-xs text-slate-500">{imageName}</p>
           )}
         </div>
 
@@ -341,19 +415,27 @@ const AddServiceForm = ({
             </div>
             <div>
               <p className="text-xs text-slate-400">Email</p>
-              <p className="truncate font-medium text-slate-800">{technicianEmail}</p>
+              <p className="truncate font-medium text-slate-800">
+                {technicianEmail}
+              </p>
             </div>
           </div>
           <p className="mt-4 rounded-lg bg-amber-50 p-3 text-xs text-amber-800">
-            Your service stays <strong>pending</strong> until an admin approves it.
+            Your service stays <strong>pending</strong> until an admin approves
+            it.
           </p>
         </div>
 
-        <Button type="submit" size="lg" disabled={busy} className="w-full bg-blue-600 hover:bg-blue-700">
+        <Button
+          type="submit"
+          size="lg"
+          disabled={busy}
+          className="w-full bg-blue-600 hover:bg-blue-700"
+        >
           {busy ? (
             <>
               <Loader2Icon className="size-4 animate-spin" />
-              Publishing...
+              {uploading ? "Uploading..." : "Publishing..."}
             </>
           ) : (
             <>
