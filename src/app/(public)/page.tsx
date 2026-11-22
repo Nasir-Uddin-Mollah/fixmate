@@ -1,12 +1,19 @@
+import CustomerReviewsSection from "@/components/home/customer-reviews-section";
+import HeroSection from "@/components/home/hero-section";
+import HowItWorksSection from "@/components/home/how-it-works-section";
+import RepairCategoriesSection from "@/components/home/repair-categories-section";
+import TechnicianCtaSection from "@/components/home/technician-cta-section";
+import WhyFixMateSection from "@/components/home/why-fixmate-section";
+
 const HomePage = () => {
   return (
-    <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
-      <h1 className="text-3xl font-bold text-gray-900">
-        Welcome to FixMate
-      </h1>
-      <p className="mt-4 text-gray-600">
-        Smart Device & Home Appliance Repair Service Platform
-      </p>
+    <div className="flex flex-col gap-20 pb-20">
+      <HeroSection />
+      <RepairCategoriesSection />
+      <HowItWorksSection />
+      <WhyFixMateSection />
+      <CustomerReviewsSection />
+      <TechnicianCtaSection />
     </div>
   );
 };
