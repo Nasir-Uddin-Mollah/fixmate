@@ -17,7 +17,10 @@ export const metadata: Metadata = {
 
 const RootLayout = ({ children }: { children: React.ReactNode }) => {
   return (
-    <html lang="en" className={`${fontSans.variable} h-full antialiased`}>
+    <html
+      lang="en"
+      className={`${fontSans.variable} h-full scroll-smooth scroll-pt-16 antialiased motion-reduce:scroll-auto`}
+    >
       <body className="min-h-full flex flex-col">
         {children}
         <Toaster />
