@@ -20,6 +20,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { createService } from "@/lib/api/services";
 
 const CATEGORIES = [
   "Smartphone",
@@ -190,14 +191,40 @@ const AddServiceForm = ({
     event.preventDefault();
     if (!validate() || !imageUrl) return;
 
+    const formData = new FormData(event.currentTarget);
+    const data = Object.fromEntries(formData.entries());
+
+    const payload = {
+      title: String(data.title ?? "").trim(),
+      category: String(data.category ?? ""),
+      description: String(data.description ?? "").trim(),
+      basePrice: Number(data.basePrice),
+      estimatedDuration: String(data.estimatedDuration ?? "").trim(),
+      serviceMode: String(data.serviceMode ?? ""),
+      serviceArea: String(data.serviceArea ?? "").trim(),
+      image: String(data.image ?? ""),
+    };
+
     setSubmitting(true);
-    toast.add({
-      title: "API integration pending",
-      description:
-        "The form is ready. Upload and publishing will be connected when the backend routes are added.",
-      type: "info",
-    });
-    setSubmitting(false);
+
+    try {
+      await createService(payload);
+
+      toast.add({
+        title: "Service submitted",
+        description: "Your service was sent to the admin for approval.",
+        type: "success",
+      });
+    } catch (error) {
+      toast.add({
+        title: "Publish failed",
+        description:
+          error instanceof Error ? error.message : "Something went wrong.",
+        type: "error",
+      });
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   const busy = uploading || submitting;
@@ -207,6 +234,10 @@ const AddServiceForm = ({
       onSubmit={handleSubmit}
       className="grid grid-cols-1 gap-6 lg:grid-cols-[1fr_320px]"
     >
+      <input type="hidden" name="category" value={form.category} />
+      <input type="hidden" name="serviceMode" value={form.serviceMode} />
+      <input type="hidden" name="image" value={imageUrl ?? ""} />
+
       <div className="space-y-6 rounded-xl border border-slate-200 bg-white p-5 shadow-sm sm:p-6">
         <div>
           <h3 className="text-base font-semibold text-slate-900">
@@ -222,6 +253,7 @@ const AddServiceForm = ({
             <Label htmlFor="title">Service title</Label>
             <Input
               id="title"
+              name="title"
               value={form.title}
               onChange={(event) => update("title", event.target.value)}
               placeholder="e.g. iPhone Screen Replacement"
@@ -235,6 +267,7 @@ const AddServiceForm = ({
           <div className="space-y-1.5">
             <Label htmlFor="category">Category</Label>
             <Select
+              name="category"
               value={form.category}
               onValueChange={(value) => update("category", value ?? "")}
             >
@@ -258,6 +291,7 @@ const AddServiceForm = ({
             <Label htmlFor="basePrice">Starting price (USD)</Label>
             <Input
               id="basePrice"
+              name="basePrice"
               type="number"
               min="1"
               step="0.01"
@@ -275,6 +309,7 @@ const AddServiceForm = ({
             <Label htmlFor="description">Description</Label>
             <Textarea
               id="description"
+              name="description"
               rows={5}
               value={form.description}
               onChange={(event) => update("description", event.target.value)}
@@ -294,6 +329,7 @@ const AddServiceForm = ({
             <Label htmlFor="estimatedDuration">Estimated duration</Label>
             <Input
               id="estimatedDuration"
+              name="estimatedDuration"
               value={form.estimatedDuration}
               onChange={(event) =>
                 update("estimatedDuration", event.target.value)
@@ -310,6 +346,7 @@ const AddServiceForm = ({
             <Label htmlFor="serviceArea">Service area</Label>
             <Input
               id="serviceArea"
+              name="serviceArea"
               value={form.serviceArea}
               onChange={(event) => update("serviceArea", event.target.value)}
               placeholder="e.g. Dhanmondi, Dhaka"

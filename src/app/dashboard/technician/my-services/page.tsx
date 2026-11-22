@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { PlusCircleIcon } from "lucide-react";
 import PageHeader from "@/components/dashboard/page-header";
-import PlaceholderPanel from "@/components/dashboard/placeholder-panel";
+import MyServicesTable from "@/components/dashboard/technician/my-services-table";
 import { buttonVariants } from "@/components/ui/button";
 import { requireRole } from "@/lib/dashboard-auth";
 
@@ -22,10 +22,7 @@ const MyServicesPage = async () => {
           Add Service
         </Link>
       </PageHeader>
-      <PlaceholderPanel
-        title="Your service list will appear here"
-        description="After you publish a service, you can manage availability, edit details, and track approval status from this page."
-      />
+      <MyServicesTable />
     </div>
   );
 };
