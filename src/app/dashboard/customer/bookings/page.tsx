@@ -1,5 +1,5 @@
 import PageHeader from "@/components/dashboard/page-header";
-import PlaceholderPanel from "@/components/dashboard/placeholder-panel";
+import BookingsTable from "@/components/dashboard/customer/bookings-table";
 import { requireRole } from "@/lib/dashboard-auth";
 
 const CustomerBookingsPage = async () => {
@@ -11,10 +11,7 @@ const CustomerBookingsPage = async () => {
         title="My Bookings"
         description="Follow every repair job from request to payment."
       />
-      <PlaceholderPanel
-        title="Booking tracker is coming together"
-        description="Once the bookings API is connected, your requests, status pipeline, cancel and pay actions will appear here."
-      />
+      <BookingsTable />
     </div>
   );
 };

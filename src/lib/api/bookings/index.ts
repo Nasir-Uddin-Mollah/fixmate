@@ -49,3 +49,40 @@ export const createBooking = async (
 
   return data as Booking;
 };
+
+/** GET /api/bookings/my - only the signed-in customer's bookings. */
+export const getMyBookings = async (): Promise<Booking[]> => {
+  const token = await getJwtToken();
+
+  const response = await fetch(`${SERVER_URL}/api/bookings/my`, {
+    headers: { Authorization: `Bearer ${token}` },
+    cache: "no-store",
+  });
+
+  if (!response.ok) {
+    throw new Error("Could not load your bookings.");
+  }
+
+  return (await response.json()) as Booking[];
+};
+
+/** PATCH /api/bookings/:id/cancel - cancel a request before work starts. */
+export const cancelBooking = async (id: string): Promise<Booking> => {
+  const token = await getJwtToken();
+
+  const response = await fetch(
+    `${SERVER_URL}/api/bookings/${encodeURIComponent(id)}/cancel`,
+    {
+      method: "PATCH",
+      headers: { Authorization: `Bearer ${token}` },
+    },
+  );
+
+  const data = await response.json();
+
+  if (!response.ok) {
+    throw new Error(data?.message ?? "Could not cancel this booking.");
+  }
+
+  return data as Booking;
+};
