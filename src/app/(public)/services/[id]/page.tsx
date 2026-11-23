@@ -14,11 +14,11 @@ const DetailsContent = async ({ params }: PageProps) => {
 
 const ServiceDetailsPage = ({ params }: PageProps) => {
   return (
-    <div className="min-h-screen bg-slate-50/60">
+    <div className="min-h-screen bg-muted/60">
       <div className="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
         <Suspense
           fallback={
-            <p className="rounded-2xl bg-white p-10 text-center text-slate-500">
+            <p className="rounded-2xl bg-card p-10 text-center text-muted-foreground">
               Loading service details...
             </p>
           }

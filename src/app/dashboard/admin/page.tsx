@@ -30,16 +30,16 @@ const AdminDashboardPage = async () => {
         <StatCard label="Pending Services" value={7} icon={BadgeCheckIcon} tone="amber" />
       </div>
 
-      <div className="mt-6 rounded-xl border border-slate-200 bg-white p-5 shadow-sm sm:p-6">
+      <div className="mt-6 rounded-xl border border-border bg-card p-5 shadow-sm sm:p-6">
         <div className="mb-4 flex items-center justify-between">
           <div>
-            <h3 className="text-base font-semibold text-slate-900">Platform activity</h3>
-            <p className="flex items-center gap-1.5 text-sm text-slate-500">
+            <h3 className="text-base font-semibold text-foreground">Platform activity</h3>
+            <p className="flex items-center gap-1.5 text-sm text-muted-foreground">
               <ClipboardListIcon className="size-4" />
               Jobs created this week
             </p>
           </div>
-          <span className="rounded-full bg-blue-50 px-3 py-1 text-xs font-semibold text-blue-700">
+          <span className="rounded-full bg-blue-50 px-3 py-1 text-xs font-semibold text-blue-700 dark:bg-blue-500/15 dark:text-blue-300">
             Demo preview
           </span>
         </div>

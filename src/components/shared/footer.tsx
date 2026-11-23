@@ -21,13 +21,13 @@ const CURRENT_YEAR = new Date().getFullYear();
 
 const Footer = () => {
   return (
-    <footer className="border-t border-gray-200 bg-gray-50 text-gray-700">
+    <footer className="border-t border-border bg-muted text-foreground">
       <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-4">
           <div className="space-y-4">
             <Link
               href="/"
-              className="flex items-center gap-2 font-bold text-xl text-gray-900 hover:opacity-80 transition-opacity"
+              className="flex items-center gap-2 font-bold text-xl text-foreground hover:opacity-80 transition-opacity"
             >
               <span className="flex items-center justify-center rounded-lg bg-blue-600 p-1.5 text-white">
                 <WrenchIcon className="size-5" />
@@ -36,7 +36,7 @@ const Footer = () => {
                 Fix<span className="text-blue-600">Mate</span>
               </span>
             </Link>
-            <p className="text-sm leading-relaxed text-gray-600">
+            <p className="text-sm leading-relaxed text-muted-foreground">
               FixMate is an on-demand device & home appliance repair booking platform.
               Connect with verified technicians, track your repair step by step,
               and pay securely only after the job is completed.
@@ -46,7 +46,7 @@ const Footer = () => {
                 href="https://x.com"
                 target="_blank"
                 rel="noreferrer"
-                className="flex size-9 items-center justify-center rounded-lg border border-gray-300 bg-white text-gray-700 hover:border-gray-400 hover:text-black transition-colors"
+                className="flex size-9 items-center justify-center rounded-lg border border-border bg-card text-foreground hover:border-foreground/30 hover:text-foreground transition-colors"
                 aria-label="Follow us on X"
               >
                 <svg className="size-4 fill-current" viewBox="0 0 24 24">
@@ -57,7 +57,7 @@ const Footer = () => {
                 href="https://facebook.com"
                 target="_blank"
                 rel="noreferrer"
-                className="flex size-9 items-center justify-center rounded-lg border border-gray-300 bg-white text-gray-700 hover:border-blue-600 hover:text-blue-600 transition-colors"
+                className="flex size-9 items-center justify-center rounded-lg border border-border bg-card text-foreground hover:border-blue-600 hover:text-blue-600 transition-colors"
                 aria-label="Facebook"
               >
                 <svg className="size-4 fill-current" viewBox="0 0 24 24">
@@ -68,7 +68,7 @@ const Footer = () => {
                 href="https://linkedin.com"
                 target="_blank"
                 rel="noreferrer"
-                className="flex size-9 items-center justify-center rounded-lg border border-gray-300 bg-white text-gray-700 hover:border-blue-700 hover:text-blue-700 transition-colors"
+                className="flex size-9 items-center justify-center rounded-lg border border-border bg-card text-foreground hover:border-blue-700 hover:text-blue-700 transition-colors"
                 aria-label="LinkedIn"
               >
                 <svg className="size-4 fill-current" viewBox="0 0 24 24">
@@ -79,7 +79,7 @@ const Footer = () => {
           </div>
 
           <div>
-            <h3 className="text-sm font-semibold uppercase tracking-wider text-gray-900">
+            <h3 className="text-sm font-semibold uppercase tracking-wider text-foreground">
               Quick Links
             </h3>
             <ul className="mt-4 space-y-2 text-sm">
@@ -87,7 +87,7 @@ const Footer = () => {
                 <li key={link.href}>
                   <Link
                     href={link.href}
-                    className="text-gray-600 hover:text-blue-600 transition-colors"
+                    className="text-muted-foreground hover:text-blue-600 transition-colors"
                   >
                     {link.label}
                   </Link>
@@ -96,7 +96,7 @@ const Footer = () => {
               <li>
                 <Link
                   href="/sign-in"
-                  className="text-gray-600 hover:text-blue-600 transition-colors"
+                  className="text-muted-foreground hover:text-blue-600 transition-colors"
                 >
                   Technician Sign In
                 </Link>
@@ -104,7 +104,7 @@ const Footer = () => {
               <li>
                 <Link
                   href="/sign-up"
-                  className="text-gray-600 hover:text-blue-600 transition-colors"
+                  className="text-muted-foreground hover:text-blue-600 transition-colors"
                 >
                   Join as Technician
                 </Link>
@@ -113,7 +113,7 @@ const Footer = () => {
           </div>
 
           <div>
-            <h3 className="text-sm font-semibold uppercase tracking-wider text-gray-900">
+            <h3 className="text-sm font-semibold uppercase tracking-wider text-foreground">
               Popular Categories
             </h3>
             <ul className="mt-4 space-y-2 text-sm">
@@ -121,7 +121,7 @@ const Footer = () => {
                 <li key={cat.label}>
                   <Link
                     href={cat.href}
-                    className="text-gray-600 hover:text-blue-600 transition-colors"
+                    className="text-muted-foreground hover:text-blue-600 transition-colors"
                   >
                     {cat.label}
                   </Link>
@@ -131,10 +131,10 @@ const Footer = () => {
           </div>
 
           <div>
-            <h3 className="text-sm font-semibold uppercase tracking-wider text-gray-900">
+            <h3 className="text-sm font-semibold uppercase tracking-wider text-foreground">
               Contact Us
             </h3>
-            <ul className="mt-4 space-y-3 text-sm text-gray-600">
+            <ul className="mt-4 space-y-3 text-sm text-muted-foreground">
               <li className="flex items-start gap-2.5">
                 <MapPinIcon className="size-4 shrink-0 text-blue-600 mt-0.5" />
                 <span>Dhaka, Bangladesh</span>
@@ -157,25 +157,25 @@ const Footer = () => {
                   support@fixmate.com
                 </a>
               </li>
-              <li className="pt-2 text-xs text-gray-500">
+              <li className="pt-2 text-xs text-muted-foreground">
                 Service Hours: 9:00 AM – 9:00 PM (Every day)
               </li>
             </ul>
           </div>
         </div>
 
-        <div className="mt-12 border-t border-gray-200 pt-6 flex flex-col sm:flex-row items-center justify-between text-xs text-gray-500 gap-4">
+        <div className="mt-12 border-t border-border pt-6 flex flex-col sm:flex-row items-center justify-between text-xs text-muted-foreground gap-4">
           <p suppressHydrationWarning>
             © {CURRENT_YEAR} FixMate. All rights reserved.
           </p>
           <div className="flex gap-6">
-            <Link href="/about" className="hover:text-gray-700 transition-colors">
+            <Link href="/about" className="hover:text-foreground transition-colors">
               Terms & Conditions
             </Link>
-            <Link href="/about" className="hover:text-gray-700 transition-colors">
+            <Link href="/about" className="hover:text-foreground transition-colors">
               Privacy Policy
             </Link>
-            <Link href="/about" className="hover:text-gray-700 transition-colors">
+            <Link href="/about" className="hover:text-foreground transition-colors">
               Security
             </Link>
           </div>

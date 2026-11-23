@@ -21,6 +21,7 @@ import {
   type LucideIcon,
 } from "lucide-react";
 import { signOut } from "@/app/lib/auth-client";
+import ModeToggle from "@/components/shared/mode-toggle";
 import { toast } from "@/components/ui/toast";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import type { DashboardUser, Role } from "@/lib/dashboard-auth";
@@ -103,7 +104,7 @@ const DashboardShell = ({
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 text-slate-900">
+    <div className="min-h-screen bg-background text-foreground">
       {sidebarOpen && (
         <button
           type="button"
@@ -195,28 +196,30 @@ const DashboardShell = ({
       </aside>
 
       <div className="flex min-h-screen flex-col lg:pl-64">
-        <header className="sticky top-0 z-20 flex h-16 items-center gap-3 border-b border-slate-200 bg-white/95 px-4 backdrop-blur sm:px-6">
+        <header className="sticky top-0 z-20 flex h-16 items-center gap-3 border-b border-border bg-card/95 px-4 backdrop-blur sm:px-6">
           <button
             type="button"
             aria-label="Open menu"
             onClick={() => setSidebarOpen(true)}
-            className="rounded-md p-1.5 text-slate-600 hover:bg-slate-100 lg:hidden"
+            className="rounded-md p-1.5 text-muted-foreground hover:bg-muted lg:hidden"
           >
             <MenuIcon className="size-5" />
           </button>
 
           <div className="min-w-0 flex-1">
-            <p className="text-[11px] font-medium text-slate-400">
+            <p className="text-[11px] font-medium text-muted-foreground">
               FixMate Dashboard
             </p>
-            <h1 className="truncate text-base font-bold text-slate-900 sm:text-lg">
+            <h1 className="truncate text-base font-bold text-foreground sm:text-lg">
               {current.label}
             </h1>
           </div>
 
+          <ModeToggle />
+
           <Link
             href="/"
-            className="hidden items-center gap-1.5 rounded-lg border border-slate-200 px-3 py-2 text-sm font-medium text-slate-600 transition-colors hover:bg-slate-50 hover:text-slate-900 sm:inline-flex"
+            className="hidden items-center gap-1.5 rounded-lg border border-border px-3 py-2 text-sm font-medium text-muted-foreground transition-colors hover:bg-muted hover:text-foreground sm:inline-flex"
           >
             <HouseIcon className="size-4" />
             Back to Home
@@ -225,7 +228,7 @@ const DashboardShell = ({
           <button
             type="button"
             onClick={handleSignOut}
-            className="inline-flex items-center gap-1.5 rounded-lg border border-slate-200 px-3 py-2 text-sm font-medium text-slate-600 transition-colors hover:bg-red-50 hover:text-red-600"
+            className="inline-flex items-center gap-1.5 rounded-lg border border-border px-3 py-2 text-sm font-medium text-muted-foreground transition-colors hover:bg-destructive/10 hover:text-destructive"
           >
             <LogOutIcon className="size-4" />
             <span className="hidden sm:inline">Sign Out</span>

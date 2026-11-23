@@ -13,17 +13,17 @@ const ServicesContent = async ({ searchParams }: PageProps) => {
 
 const ServicesPage = ({ searchParams }: PageProps) => {
   return (
-    <div className="bg-slate-50/60">
-      <section className="border-b border-slate-200 bg-white">
+    <div className="bg-muted/60">
+      <section className="border-b border-border bg-card">
         <div className="mx-auto max-w-7xl px-4 py-14">
-          <span className="inline-flex items-center gap-2 rounded-full bg-blue-50 px-3 py-1 text-xs font-bold text-blue-600 uppercase">
+          <span className="inline-flex items-center gap-2 rounded-full bg-blue-50 px-3 py-1 text-xs font-bold text-blue-600 uppercase dark:bg-blue-500/15 dark:text-blue-300">
             <WrenchIcon className="size-3.5" />
             Browse Services
           </span>
-          <h1 className="mt-4 text-3xl font-extrabold text-slate-900 sm:text-4xl">
+          <h1 className="mt-4 text-3xl font-extrabold text-foreground sm:text-4xl">
             Find the right repair for you
           </h1>
-          <p className="mt-3 text-sm text-slate-600">
+          <p className="mt-3 text-sm text-muted-foreground">
             Verified technicians, upfront pricing, and doorstep service across Dhaka.
           </p>
         </div>
@@ -31,7 +31,7 @@ const ServicesPage = ({ searchParams }: PageProps) => {
 
       <section className="mx-auto max-w-7xl px-4 py-10">
         <Suspense
-          fallback={<p className="py-16 text-center text-slate-500">Loading services...</p>}
+          fallback={<p className="py-16 text-center text-muted-foreground">Loading services...</p>}
         >
           <ServicesContent searchParams={searchParams} />
         </Suspense>

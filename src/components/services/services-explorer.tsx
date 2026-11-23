@@ -18,7 +18,7 @@ const CATEGORIES = [
 const MODES = ["Home Visit", "Shop Drop-off"];
 
 const selectClass =
-  "h-10 rounded-lg border border-slate-300 bg-white px-3 text-sm text-slate-700";
+  "h-10 rounded-lg border border-border bg-card px-3 text-sm text-foreground";
 
 const ServicesExplorer = ({ initialCategory = "" }: { initialCategory?: string }) => {
   const [searchText, setSearchText] = useState("");
@@ -66,7 +66,7 @@ const ServicesExplorer = ({ initialCategory = "" }: { initialCategory?: string }
   return (
     <div className="space-y-6">
       {/* Filters */}
-      <div className="flex flex-col gap-3 rounded-2xl border border-slate-200 bg-white p-4 md:flex-row">
+      <div className="flex flex-col gap-3 rounded-2xl border border-border bg-card p-4 md:flex-row">
         <form
           className="flex flex-1 gap-2"
           onSubmit={(event) => {
@@ -79,7 +79,7 @@ const ServicesExplorer = ({ initialCategory = "" }: { initialCategory?: string }
             value={searchText}
             onChange={(event) => setSearchText(event.target.value)}
             placeholder="Search services..."
-            className="h-10 w-full rounded-lg border border-slate-300 px-3 text-sm"
+            className="h-10 w-full rounded-lg border border-border px-3 text-sm"
           />
           <button className="shrink-0 rounded-lg bg-blue-600 px-4 text-sm font-medium text-white hover:bg-blue-700">
             Search
@@ -134,10 +134,10 @@ const ServicesExplorer = ({ initialCategory = "" }: { initialCategory?: string }
       </div>
 
       {/* States */}
-      {loading && <p className="py-16 text-center text-slate-500">Loading services...</p>}
+      {loading && <p className="py-16 text-center text-muted-foreground">Loading services...</p>}
 
       {!loading && error && (
-        <div className="rounded-2xl bg-white p-10 text-center">
+        <div className="rounded-2xl bg-card p-10 text-center">
           <p className="text-sm text-red-600">{error}</p>
           <button
             onClick={() => setReload((value) => value + 1)}
@@ -149,9 +149,9 @@ const ServicesExplorer = ({ initialCategory = "" }: { initialCategory?: string }
       )}
 
       {!loading && !error && services.length === 0 && (
-        <div className="rounded-2xl bg-white p-10 text-center">
-          <p className="font-semibold text-slate-900">No services found</p>
-          <p className="mt-1 text-sm text-slate-500">Try a different search.</p>
+        <div className="rounded-2xl bg-card p-10 text-center">
+          <p className="font-semibold text-foreground">No services found</p>
+          <p className="mt-1 text-sm text-muted-foreground">Try a different search.</p>
         </div>
       )}
 
@@ -161,9 +161,9 @@ const ServicesExplorer = ({ initialCategory = "" }: { initialCategory?: string }
           {services.map((service) => (
             <div
               key={service._id}
-              className="overflow-hidden rounded-2xl border border-slate-200 bg-white"
+              className="overflow-hidden rounded-2xl border border-border bg-card"
             >
-              <div className="relative h-40 bg-slate-100">
+              <div className="relative h-40 bg-muted">
                 {service.image && (
                   <Image
                     src={service.image}
@@ -177,13 +177,13 @@ const ServicesExplorer = ({ initialCategory = "" }: { initialCategory?: string }
 
               <div className="space-y-2 p-5">
                 <p className="text-xs font-semibold text-blue-600">{service.category}</p>
-                <h3 className="font-bold text-slate-900">{service.title}</h3>
-                <p className="line-clamp-2 text-sm text-slate-500">{service.description}</p>
+                <h3 className="font-bold text-foreground">{service.title}</h3>
+                <p className="line-clamp-2 text-sm text-muted-foreground">{service.description}</p>
 
-                <p className="text-xs text-slate-500">
+                <p className="text-xs text-muted-foreground">
                   {service.estimatedDuration} · {service.serviceMode} · {service.serviceArea}
                 </p>
-                <p className="text-xs text-slate-500">By {service.technicianName}</p>
+                <p className="text-xs text-muted-foreground">By {service.technicianName}</p>
 
                 <div className="flex items-center justify-between pt-3">
                   <span className="text-lg font-bold text-blue-600">
@@ -212,7 +212,7 @@ const ServicesExplorer = ({ initialCategory = "" }: { initialCategory?: string }
           >
             Previous
           </button>
-          <span className="text-sm text-slate-600">
+          <span className="text-sm text-muted-foreground">
             Page {page} of {totalPages}
           </span>
           <button

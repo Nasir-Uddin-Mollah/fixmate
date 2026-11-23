@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Plus_Jakarta_Sans } from "next/font/google";
 import "./globals.css";
+import ThemeProvider from "@/components/shared/theme-provider";
 import { Toaster } from "@/components/ui/toast";
 
 const fontSans = Plus_Jakarta_Sans({
@@ -19,11 +20,14 @@ const RootLayout = ({ children }: { children: React.ReactNode }) => {
   return (
     <html
       lang="en"
+      suppressHydrationWarning
       className={`${fontSans.variable} h-full scroll-smooth scroll-pt-16 antialiased motion-reduce:scroll-auto`}
     >
-      <body className="min-h-full flex flex-col">
-        {children}
-        <Toaster />
+      <body className="flex min-h-full flex-col bg-background text-foreground">
+        <ThemeProvider>
+          {children}
+          <Toaster />
+        </ThemeProvider>
       </body>
     </html>
   );

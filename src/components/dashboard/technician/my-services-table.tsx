@@ -61,7 +61,7 @@ const MyServicesTable = () => {
 
   if (loading) {
     return (
-      <div className="rounded-xl border border-slate-200 bg-white p-5 shadow-sm">
+      <div className="rounded-xl border border-border bg-card p-5 shadow-sm">
         <Skeleton className="h-5 w-40" />
         <div className="mt-5 space-y-3">
           {[0, 1, 2].map((row) => (
@@ -74,7 +74,7 @@ const MyServicesTable = () => {
 
   if (error) {
     return (
-      <div className="rounded-xl border border-red-200 bg-white p-8 text-center shadow-sm">
+      <div className="rounded-xl border border-red-200 bg-card p-8 text-center shadow-sm">
         <p className="text-sm font-medium text-red-600">{error}</p>
         <Button className="mt-4" onClick={() => void load()} variant="outline">
           <RefreshCwIcon className="size-4" />
@@ -86,11 +86,11 @@ const MyServicesTable = () => {
 
   if (services.length === 0) {
     return (
-      <div className="rounded-xl border border-slate-200 bg-white p-10 text-center shadow-sm">
-        <h3 className="text-base font-semibold text-slate-900">
+      <div className="rounded-xl border border-border bg-card p-10 text-center shadow-sm">
+        <h3 className="text-base font-semibold text-foreground">
           No services yet
         </h3>
-        <p className="mt-2 text-sm text-slate-500">
+        <p className="mt-2 text-sm text-muted-foreground">
           Publish your first service to start receiving repair requests.
         </p>
         <Link
@@ -105,7 +105,7 @@ const MyServicesTable = () => {
 
   return (
     <div className="space-y-3">
-      <div className="overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm">
+      <div className="overflow-hidden rounded-xl border border-border bg-card shadow-sm">
         <Table>
           <TableHeader>
             <TableRow>
@@ -130,16 +130,16 @@ const MyServicesTable = () => {
                       className="size-14 rounded-lg object-cover"
                     />
                     <div className="min-w-0">
-                      <p className="truncate font-medium text-slate-900">
+                      <p className="truncate font-medium text-foreground">
                         {service.title}
                       </p>
-                      <p className="text-xs text-slate-500">
+                      <p className="text-xs text-muted-foreground">
                         {service.category} · {service.serviceMode}
                       </p>
                     </div>
                   </div>
                 </TableCell>
-                <TableCell className="font-medium text-slate-800">
+                <TableCell className="font-medium text-foreground">
                   ${service.basePrice}
                 </TableCell>
                 <TableCell>
@@ -156,7 +156,7 @@ const MyServicesTable = () => {
                     {service.isAvailable ? "Available" : "Paused"}
                   </Badge>
                 </TableCell>
-                <TableCell className="text-sm text-slate-500">
+                <TableCell className="text-sm text-muted-foreground">
                   {formatDate(service.createdAt)}
                 </TableCell>
               </TableRow>

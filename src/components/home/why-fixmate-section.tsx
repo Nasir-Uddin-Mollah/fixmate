@@ -41,10 +41,10 @@ const WhyFixMateSection = () => {
         <h2 className="text-xs font-bold uppercase tracking-wider text-blue-600">
           Why FixMate
         </h2>
-        <p className="mt-2 text-3xl font-extrabold tracking-tight text-gray-900 sm:text-4xl">
+        <p className="mt-2 text-3xl font-extrabold tracking-tight text-foreground sm:text-4xl">
           Built for Trust & Quality
         </p>
-        <p className="mt-3 text-sm text-gray-600 sm:text-base">
+        <p className="mt-3 text-sm text-muted-foreground sm:text-base">
           No more uncertainty about where your device is or paying before the work is done.
         </p>
       </div>
@@ -55,13 +55,13 @@ const WhyFixMateSection = () => {
           return (
             <div
               key={tp.title}
-              className="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm hover:shadow-md transition-shadow"
+              className="rounded-2xl border border-border bg-card p-6 shadow-sm hover:shadow-md transition-shadow"
             >
               <div className="flex size-11 items-center justify-center rounded-xl bg-emerald-50 text-emerald-600 mb-4">
                 <Icon className="size-5" />
               </div>
-              <h3 className="text-base font-bold text-gray-900 mb-2">{tp.title}</h3>
-              <p className="text-xs text-gray-600 leading-relaxed">{tp.description}</p>
+              <h3 className="text-base font-bold text-foreground mb-2">{tp.title}</h3>
+              <p className="text-xs text-muted-foreground leading-relaxed">{tp.description}</p>
             </div>
           );
         })}

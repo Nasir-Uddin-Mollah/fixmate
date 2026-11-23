@@ -14,6 +14,7 @@ import {
 } from "lucide-react";
 import { cn } from "cn";
 import { useSession, signOut } from "@/app/lib/auth-client";
+import ModeToggle from "@/components/shared/mode-toggle";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import {
   DropdownMenu,
@@ -75,11 +76,11 @@ const Navbar = () => {
   };
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b border-gray-200 bg-white/90 backdrop-blur-md shadow-sm">
+    <header className="sticky top-0 z-50 w-full border-b border-border bg-card/90 backdrop-blur-md shadow-sm">
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
         <Link
           href="/"
-          className="flex items-center gap-2 font-bold text-xl text-gray-900 hover:opacity-80 transition-opacity"
+          className="flex items-center gap-2 font-bold text-xl text-foreground hover:opacity-80 transition-opacity"
         >
           <span className="flex items-center justify-center rounded-lg bg-blue-600 p-1.5 text-white">
             <WrenchIcon className="size-5" />
@@ -101,7 +102,7 @@ const Navbar = () => {
                   "relative px-4 py-2 text-sm font-medium rounded-md transition-colors",
                   isActive
                     ? "text-blue-600"
-                    : "text-gray-600 hover:text-gray-900 hover:bg-gray-100",
+                    : "text-muted-foreground hover:text-foreground hover:bg-muted",
                 )}
               >
                 {label}
@@ -114,10 +115,11 @@ const Navbar = () => {
         </nav>
 
         <div className="hidden md:flex items-center gap-3">
+          <ModeToggle />
           {user ? (
             <DropdownMenu>
               <DropdownMenuTrigger>
-                <span className="flex items-center gap-2 rounded-full px-2 py-1 hover:bg-gray-100 transition-colors outline-none focus-visible:ring-2 focus-visible:ring-blue-500 cursor-pointer">
+                <span className="flex items-center gap-2 rounded-full px-2 py-1 hover:bg-muted transition-colors outline-none focus-visible:ring-2 focus-visible:ring-blue-500 cursor-pointer">
                   <Avatar size="default">
                     <AvatarImage
                       src={user.image ?? ""}
@@ -127,13 +129,13 @@ const Navbar = () => {
                       {initials}
                     </AvatarFallback>
                   </Avatar>
-                  <ChevronDownIcon className="size-4 text-gray-500" />
+                  <ChevronDownIcon className="size-4 text-muted-foreground" />
                 </span>
               </DropdownMenuTrigger>
 
               <DropdownMenuContent align="end" className="w-56">
                 <div className="px-2.5 py-2">
-                  <p className="text-sm font-semibold text-gray-900 truncate">
+                  <p className="text-sm font-semibold text-foreground truncate">
                     {user.name}
                   </p>
                   <p className="text-xs text-muted-foreground truncate">
@@ -175,7 +177,7 @@ const Navbar = () => {
             <>
               <Link
                 href="/sign-in"
-                className="inline-flex h-7 items-center rounded-lg px-2.5 text-[0.8rem] font-medium text-gray-700 hover:bg-gray-100 transition-colors"
+                className="inline-flex h-7 items-center rounded-lg px-2.5 text-[0.8rem] font-medium text-foreground hover:bg-muted transition-colors"
               >
                 Sign In
               </Link>
@@ -189,21 +191,24 @@ const Navbar = () => {
           )}
         </div>
 
-        <button
-          className="flex md:hidden items-center justify-center rounded-md p-2 text-gray-600 hover:bg-gray-100 transition-colors"
-          onClick={() => setMobileOpen((prev) => !prev)}
-          aria-label="Toggle menu"
-        >
-          {mobileOpen ? (
-            <XIcon className="size-5" />
-          ) : (
-            <MenuIcon className="size-5" />
-          )}
-        </button>
+        <div className="flex items-center gap-1 md:hidden">
+          <ModeToggle />
+          <button
+            className="flex items-center justify-center rounded-md p-2 text-muted-foreground hover:bg-muted transition-colors"
+            onClick={() => setMobileOpen((prev) => !prev)}
+            aria-label="Toggle menu"
+          >
+            {mobileOpen ? (
+              <XIcon className="size-5" />
+            ) : (
+              <MenuIcon className="size-5" />
+            )}
+          </button>
+        </div>
       </div>
 
       {mobileOpen && (
-        <div className="md:hidden border-t border-gray-200 bg-white px-4 py-4 space-y-1">
+        <div className="md:hidden border-t border-border bg-card px-4 py-4 space-y-1">
           {NAV_LINKS.map(({ label, href }) => {
             const isActive =
               pathname === href || (href !== "/" && pathname.startsWith(href));
@@ -215,8 +220,8 @@ const Navbar = () => {
                 className={cn(
                   "flex items-center px-3 py-2.5 rounded-md text-sm font-medium transition-colors",
                   isActive
-                    ? "bg-blue-50 text-blue-600"
-                    : "text-gray-700 hover:bg-gray-100",
+                    ? "bg-blue-500/15 text-blue-500"
+                    : "text-foreground hover:bg-muted",
                 )}
               >
                 {label}
@@ -224,7 +229,7 @@ const Navbar = () => {
             );
           })}
 
-          <div className="border-t border-gray-200 pt-3 mt-3">
+          <div className="border-t border-border pt-3 mt-3">
             {user ? (
               <div className="space-y-1">
                 <div className="flex items-center gap-3 px-3 py-2 mb-2">
@@ -238,7 +243,7 @@ const Navbar = () => {
                     </AvatarFallback>
                   </Avatar>
                   <div className="min-w-0">
-                    <p className="text-sm font-semibold text-gray-900 truncate">
+                    <p className="text-sm font-semibold text-foreground truncate">
                       {user.name}
                     </p>
                     <span
@@ -255,7 +260,7 @@ const Navbar = () => {
                 <Link
                   href={dashboardHref}
                   onClick={() => setMobileOpen(false)}
-                  className="flex items-center gap-2 px-3 py-2.5 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-100 transition-colors"
+                  className="flex items-center gap-2 px-3 py-2.5 rounded-md text-sm font-medium text-foreground hover:bg-muted transition-colors"
                 >
                   <LayoutDashboardIcon className="size-4" />
                   Dashboard
@@ -264,7 +269,7 @@ const Navbar = () => {
                 <Link
                   href="/dashboard/profile"
                   onClick={() => setMobileOpen(false)}
-                  className="flex items-center gap-2 px-3 py-2.5 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-100 transition-colors"
+                  className="flex items-center gap-2 px-3 py-2.5 rounded-md text-sm font-medium text-foreground hover:bg-muted transition-colors"
                 >
                   <UserIcon className="size-4" />
                   Update Profile
@@ -286,7 +291,7 @@ const Navbar = () => {
                 <Link
                   href="/sign-in"
                   onClick={() => setMobileOpen(false)}
-                  className="flex items-center justify-center rounded-md border border-gray-300 px-4 py-2.5 text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors"
+                  className="flex items-center justify-center rounded-md border border-border px-4 py-2.5 text-sm font-medium text-foreground hover:bg-muted transition-colors"
                 >
                   Sign In
                 </Link>

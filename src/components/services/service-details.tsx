@@ -55,7 +55,7 @@ const ServiceDetails = ({ id }: { id: string }) => {
 
   if (loading) {
     return (
-      <div className="rounded-2xl border border-slate-200 bg-white p-10 text-center text-slate-500">
+      <div className="rounded-2xl border border-border bg-card p-10 text-center text-muted-foreground">
         Loading service details...
       </div>
     );
@@ -63,7 +63,7 @@ const ServiceDetails = ({ id }: { id: string }) => {
 
   if (error) {
     return (
-      <div className="rounded-2xl border border-red-200 bg-white p-10 text-center">
+      <div className="rounded-2xl border border-red-200 bg-card p-10 text-center">
         <p className="text-sm text-red-600">{error}</p>
         <button
           onClick={() => setReload((value) => value + 1)}
@@ -78,10 +78,10 @@ const ServiceDetails = ({ id }: { id: string }) => {
 
   if (missing || !service) {
     return (
-      <div className="rounded-2xl border border-slate-200 bg-white p-12 text-center">
-        <WrenchIcon className="mx-auto size-10 text-slate-300" />
-        <h1 className="mt-4 text-xl font-bold text-slate-900">Service not found</h1>
-        <p className="mt-2 text-sm text-slate-500">
+      <div className="rounded-2xl border border-border bg-card p-12 text-center">
+        <WrenchIcon className="mx-auto size-10 text-muted-foreground" />
+        <h1 className="mt-4 text-xl font-bold text-foreground">Service not found</h1>
+        <p className="mt-2 text-sm text-muted-foreground">
           This service may have been removed or is no longer available.
         </p>
         <Link
@@ -150,8 +150,8 @@ const ServiceDetails = ({ id }: { id: string }) => {
 
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-[1.6fr_1fr]">
         {/* Main content */}
-        <article className="overflow-hidden rounded-2xl border border-slate-200 bg-white">
-          <div className="relative h-64 bg-slate-100 sm:h-80">
+        <article className="overflow-hidden rounded-2xl border border-border bg-card">
+          <div className="relative h-64 bg-muted sm:h-80">
             {service.image ? (
               <Image
                 src={service.image}
@@ -162,31 +162,31 @@ const ServiceDetails = ({ id }: { id: string }) => {
               />
             ) : (
               <div className="flex h-full items-center justify-center">
-                <WrenchIcon className="size-12 text-slate-300" />
+                <WrenchIcon className="size-12 text-muted-foreground" />
               </div>
             )}
-            <span className="absolute top-4 left-4 rounded-full bg-white/95 px-3 py-1 text-xs font-semibold text-blue-600 shadow-sm">
+            <span className="absolute top-4 left-4 rounded-full bg-card/95 px-3 py-1 text-xs font-semibold text-blue-600 shadow-sm">
               {service.category}
             </span>
           </div>
 
           <div className="space-y-6 p-6 sm:p-8">
             <div>
-              <h1 className="text-2xl font-extrabold text-slate-900 sm:text-3xl">
+              <h1 className="text-2xl font-extrabold text-foreground sm:text-3xl">
                 {service.title}
               </h1>
-              <p className="mt-2 text-sm text-slate-400">Posted on {postedOn}</p>
+              <p className="mt-2 text-sm text-muted-foreground">Posted on {postedOn}</p>
             </div>
 
             <div>
-              <h2 className="text-lg font-bold text-slate-900">About this service</h2>
-              <p className="mt-2 leading-relaxed whitespace-pre-line text-slate-600">
+              <h2 className="text-lg font-bold text-foreground">About this service</h2>
+              <p className="mt-2 leading-relaxed whitespace-pre-line text-muted-foreground">
                 {service.description}
               </p>
             </div>
 
             <div>
-              <h2 className="text-lg font-bold text-slate-900">Service details</h2>
+              <h2 className="text-lg font-bold text-foreground">Service details</h2>
               <div className="mt-3 grid grid-cols-1 gap-3 sm:grid-cols-2">
                 <Detail icon={<ClockIcon className="size-4" />} label="Estimated duration">
                   {service.estimatedDuration}
@@ -212,15 +212,15 @@ const ServiceDetails = ({ id }: { id: string }) => {
               </div>
             </div>
 
-            <div className="rounded-xl border border-blue-100 bg-blue-50/60 p-4">
-              <h2 className="text-sm font-bold text-slate-900">Provided by</h2>
-              <p className="mt-1 text-sm text-slate-600">
-                <span className="font-semibold text-slate-800">
+            <div className="rounded-xl border border-blue-100 bg-blue-50/60 p-4 dark:border-blue-400/20 dark:bg-blue-500/10">
+              <h2 className="text-sm font-bold text-foreground">Provided by</h2>
+              <p className="mt-1 text-sm text-muted-foreground">
+                <span className="font-semibold text-foreground">
                   {service.technicianName}
                 </span>{" "}
                 — verified FixMate technician
               </p>
-              <p className="mt-1 text-xs text-slate-500">
+              <p className="mt-1 text-xs text-muted-foreground">
                 Available for {service.serviceArea}
               </p>
             </div>
@@ -228,12 +228,12 @@ const ServiceDetails = ({ id }: { id: string }) => {
         </article>
 
         {/* Booking card */}
-        <aside className="h-fit rounded-2xl border border-slate-200 bg-white p-6 lg:sticky lg:top-6">
-          <p className="text-sm text-slate-500">Starting at</p>
+        <aside className="h-fit rounded-2xl border border-border bg-card p-6 lg:sticky lg:top-6">
+          <p className="text-sm text-muted-foreground">Starting at</p>
           <p className="mt-1 text-3xl font-extrabold text-blue-600">
             ${service.basePrice}
           </p>
-          <p className="mt-1 text-xs text-slate-400">Final price confirmed after inspection</p>
+          <p className="mt-1 text-xs text-muted-foreground">Final price confirmed after inspection</p>
 
           {isPending ? (
             <p className="mt-6 rounded-lg bg-blue-100 px-5 py-3 text-center text-sm font-semibold text-blue-700">
@@ -260,7 +260,7 @@ const ServiceDetails = ({ id }: { id: string }) => {
               <input type="hidden" name="customerEmail" value={session.user.email} readOnly />
 
               <div>
-                <label htmlFor="customerPhone" className="text-xs font-semibold text-slate-700">
+                <label htmlFor="customerPhone" className="text-xs font-semibold text-foreground">
                   Phone number
                 </label>
                 <input
@@ -269,12 +269,12 @@ const ServiceDetails = ({ id }: { id: string }) => {
                   type="tel"
                   required
                   placeholder="01XXX-XXXXXX"
-                  className="mt-1 w-full rounded-lg border border-slate-200 px-3 py-2 text-sm outline-none focus:border-blue-500"
+                  className="mt-1 w-full rounded-lg border border-border px-3 py-2 text-sm outline-none focus:border-blue-500"
                 />
               </div>
 
               <div>
-                <label htmlFor="address" className="text-xs font-semibold text-slate-700">
+                <label htmlFor="address" className="text-xs font-semibold text-foreground">
                   Address
                 </label>
                 <input
@@ -283,12 +283,12 @@ const ServiceDetails = ({ id }: { id: string }) => {
                   type="text"
                   required
                   placeholder="House, road, area"
-                  className="mt-1 w-full rounded-lg border border-slate-200 px-3 py-2 text-sm outline-none focus:border-blue-500"
+                  className="mt-1 w-full rounded-lg border border-border px-3 py-2 text-sm outline-none focus:border-blue-500"
                 />
               </div>
 
               <div>
-                <label htmlFor="preferredDate" className="text-xs font-semibold text-slate-700">
+                <label htmlFor="preferredDate" className="text-xs font-semibold text-foreground">
                   Preferred date
                 </label>
                 <input
@@ -296,14 +296,14 @@ const ServiceDetails = ({ id }: { id: string }) => {
                   name="preferredDate"
                   type="date"
                   required
-                  className="mt-1 w-full rounded-lg border border-slate-200 px-3 py-2 text-sm outline-none focus:border-blue-500"
+                  className="mt-1 w-full rounded-lg border border-border px-3 py-2 text-sm outline-none focus:border-blue-500"
                 />
               </div>
 
               <div>
                 <label
                   htmlFor="problemDescription"
-                  className="text-xs font-semibold text-slate-700"
+                  className="text-xs font-semibold text-foreground"
                 >
                   Problem description
                 </label>
@@ -313,7 +313,7 @@ const ServiceDetails = ({ id }: { id: string }) => {
                   required
                   rows={3}
                   placeholder="Tell the technician what is wrong..."
-                  className="mt-1 w-full rounded-lg border border-slate-200 px-3 py-2 text-sm outline-none focus:border-blue-500"
+                  className="mt-1 w-full rounded-lg border border-border px-3 py-2 text-sm outline-none focus:border-blue-500"
                 />
               </div>
 
@@ -345,7 +345,7 @@ const ServiceDetails = ({ id }: { id: string }) => {
             </form>
           )}
 
-          <div className="mt-5 space-y-3 border-t border-slate-100 pt-5 text-xs text-slate-500">
+          <div className="mt-5 space-y-3 border-t border-border pt-5 text-xs text-muted-foreground">
             <p className="flex items-center gap-2">
               <ShieldCheckIcon className="size-4 text-blue-500" />
               Approved by FixMate admin
@@ -374,11 +374,11 @@ const Detail = ({
   label: string;
   children: React.ReactNode;
 }) => (
-  <div className="flex items-start gap-3 rounded-xl border border-slate-200 p-4">
+  <div className="flex items-start gap-3 rounded-xl border border-border p-4">
     <span className="mt-0.5 text-blue-500">{icon}</span>
     <div>
-      <p className="text-xs text-slate-400">{label}</p>
-      <p className="mt-0.5 text-sm font-semibold text-slate-800">{children}</p>
+      <p className="text-xs text-muted-foreground">{label}</p>
+      <p className="mt-0.5 text-sm font-semibold text-foreground">{children}</p>
     </div>
   </div>
 );

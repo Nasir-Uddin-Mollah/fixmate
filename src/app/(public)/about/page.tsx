@@ -44,20 +44,20 @@ const AboutPage = () => {
   return (
     <div className="flex flex-col gap-20 pb-20">
       {/* Hero */}
-      <section className="bg-gradient-to-b from-blue-50/70 via-white to-white">
+      <section className="bg-gradient-to-b from-blue-50/70 via-white to-white dark:from-blue-950/50 dark:via-background dark:to-background">
         <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8 lg:py-24">
           <div className="max-w-3xl space-y-6">
-            <span className="inline-flex items-center gap-2 rounded-full border border-blue-200 bg-blue-50 px-3.5 py-1.5 text-xs font-semibold text-blue-700">
+            <span className="inline-flex items-center gap-2 rounded-full border border-blue-200 bg-blue-50 px-3.5 py-1.5 text-xs font-semibold text-blue-700 dark:border-blue-400/30 dark:bg-blue-500/15 dark:text-blue-300">
               <Sparkles className="size-3.5" />
               About FixMate
             </span>
 
-            <h1 className="text-4xl font-extrabold tracking-tight text-gray-900 sm:text-5xl lg:text-6xl">
+            <h1 className="text-4xl font-extrabold tracking-tight text-foreground sm:text-5xl lg:text-6xl">
               Repairs should be{" "}
-              <span className="text-blue-600">simple, honest</span> and stress-free.
+              <span className="text-blue-600 dark:text-blue-400">simple, honest</span> and stress-free.
             </h1>
 
-            <p className="text-base leading-relaxed text-gray-600 sm:text-lg">
+            <p className="text-base leading-relaxed text-muted-foreground sm:text-lg">
               FixMate was built to remove the guesswork from device and appliance repair.
               We connect you with verified technicians, show you the price upfront, and
               let you pay only after the job is done right.
@@ -73,7 +73,7 @@ const AboutPage = () => {
               </Link>
               <Link
                 href="#our-story"
-                className="inline-flex items-center justify-center rounded-xl border border-gray-300 bg-white px-6 py-3.5 text-sm font-semibold text-gray-700 hover:bg-gray-50"
+                className="inline-flex items-center justify-center rounded-xl border border-border bg-card px-6 py-3.5 text-sm font-semibold text-foreground hover:bg-muted"
               >
                 Our Story
               </Link>
@@ -89,10 +89,10 @@ const AboutPage = () => {
             <span className="text-xs font-bold uppercase tracking-wider text-blue-600">
               Our Story
             </span>
-            <h2 className="mt-2 text-3xl font-extrabold tracking-tight text-gray-900 sm:text-4xl">
+            <h2 className="mt-2 text-3xl font-extrabold tracking-tight text-foreground sm:text-4xl">
               Born from a simple frustration
             </h2>
-            <div className="mt-5 space-y-4 text-sm leading-relaxed text-gray-600 sm:text-base">
+            <div className="mt-5 space-y-4 text-sm leading-relaxed text-muted-foreground sm:text-base">
               <p>
                 Finding a trustworthy repair technician used to mean endless phone calls,
                 unclear quotes, and the worry of paying before knowing whether the device
@@ -111,24 +111,24 @@ const AboutPage = () => {
           </div>
 
           <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-1">
-            <div className="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm">
-              <div className="mb-4 flex size-11 items-center justify-center rounded-xl bg-blue-50 text-blue-600">
+            <div className="rounded-2xl border border-border bg-card p-6 shadow-sm">
+              <div className="mb-4 flex size-11 items-center justify-center rounded-xl bg-blue-50 text-blue-600 dark:bg-blue-500/15 dark:text-blue-300">
                 <Target className="size-5" />
               </div>
-              <h3 className="text-lg font-bold text-gray-900">Our Mission</h3>
-              <p className="mt-2 text-sm leading-relaxed text-gray-600">
+              <h3 className="text-lg font-bold text-foreground">Our Mission</h3>
+              <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
                 To make reliable repair service accessible to everyone through verified
                 technicians, transparent pricing, and a process that puts the customer in
                 control from request to payment.
               </p>
             </div>
 
-            <div className="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm">
+            <div className="rounded-2xl border border-border bg-card p-6 shadow-sm">
               <div className="mb-4 flex size-11 items-center justify-center rounded-xl bg-emerald-50 text-emerald-600">
                 <Eye className="size-5" />
               </div>
-              <h3 className="text-lg font-bold text-gray-900">Our Vision</h3>
-              <p className="mt-2 text-sm leading-relaxed text-gray-600">
+              <h3 className="text-lg font-bold text-foreground">Our Vision</h3>
+              <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
                 To become the most trusted repair platform in Bangladesh — where every
                 device gets expert care and every technician gets the recognition they
                 deserve.
@@ -148,10 +148,10 @@ const AboutPage = () => {
           <h2 className="text-xs font-bold uppercase tracking-wider text-blue-600">
             What We Stand For
           </h2>
-          <p className="mt-2 text-3xl font-extrabold tracking-tight text-gray-900 sm:text-4xl">
+          <p className="mt-2 text-3xl font-extrabold tracking-tight text-foreground sm:text-4xl">
             The FixMate Promise
           </p>
-          <p className="mt-3 text-sm text-gray-600 sm:text-base">
+          <p className="mt-3 text-sm text-muted-foreground sm:text-base">
             Four principles guide every repair that happens on our platform.
           </p>
         </div>
@@ -162,13 +162,13 @@ const AboutPage = () => {
             return (
               <div
                 key={value.title}
-                className="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm hover:shadow-md"
+                className="rounded-2xl border border-border bg-card p-6 shadow-sm hover:shadow-md"
               >
-                <div className="mb-4 flex size-11 items-center justify-center rounded-xl bg-blue-50 text-blue-600">
+                <div className="mb-4 flex size-11 items-center justify-center rounded-xl bg-blue-50 text-blue-600 dark:bg-blue-500/15 dark:text-blue-300">
                   <Icon className="size-5" />
                 </div>
-                <h3 className="text-base font-bold text-gray-900">{value.title}</h3>
-                <p className="mt-2 text-xs leading-relaxed text-gray-600">
+                <h3 className="text-base font-bold text-foreground">{value.title}</h3>
+                <p className="mt-2 text-xs leading-relaxed text-muted-foreground">
                   {value.description}
                 </p>
               </div>
@@ -188,7 +188,7 @@ const AboutPage = () => {
             <h2 className="text-3xl font-extrabold tracking-tight sm:text-4xl">
               Your device deserves an expert.
             </h2>
-            <p className="text-sm leading-relaxed text-gray-300 sm:text-base">
+            <p className="text-sm leading-relaxed text-muted-foreground sm:text-base">
               Browse approved services from verified technicians and book your repair in
               minutes — with payment only after the work is complete.
             </p>

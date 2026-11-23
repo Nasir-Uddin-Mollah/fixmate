@@ -120,12 +120,12 @@ const SignInForm = () => {
   };
 
   return (
-    <div className="flex min-h-[calc(100vh-4rem)] items-center justify-center bg-gray-50/60 px-4 py-12 sm:px-6 lg:px-8">
-      <div className="w-full max-w-md space-y-8 rounded-2xl border border-gray-200 bg-white p-8 shadow-sm">
+    <div className="flex min-h-[calc(100vh-4rem)] items-center justify-center bg-muted/60 px-4 py-12 sm:px-6 lg:px-8">
+      <div className="w-full max-w-md space-y-8 rounded-2xl border border-border bg-card p-8 shadow-sm">
         <div className="text-center">
           <Link
             href="/"
-            className="inline-flex items-center gap-2 font-bold text-2xl text-gray-900"
+            className="inline-flex items-center gap-2 font-bold text-2xl text-foreground"
           >
             <span className="flex items-center justify-center rounded-lg bg-blue-600 p-2 text-white">
               <WrenchIcon className="size-5" />
@@ -134,10 +134,10 @@ const SignInForm = () => {
               Fix<span className="text-blue-600">Mate</span>
             </span>
           </Link>
-          <h2 className="mt-4 text-2xl font-bold tracking-tight text-gray-900">
+          <h2 className="mt-4 text-2xl font-bold tracking-tight text-foreground">
             Welcome Back
           </h2>
-          <p className="mt-2 text-sm text-gray-600">
+          <p className="mt-2 text-sm text-muted-foreground">
             Sign in to access your FixMate dashboard
           </p>
         </div>
@@ -147,12 +147,12 @@ const SignInForm = () => {
             <div>
               <label
                 htmlFor="email"
-                className="block text-sm font-medium text-gray-700 mb-1"
+                className="block text-sm font-medium text-foreground mb-1"
               >
                 Email Address
               </label>
               <div className="relative">
-                <span className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none text-gray-400">
+                <span className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none text-muted-foreground">
                   <MailIcon className="size-4" />
                 </span>
                 <Input
@@ -170,13 +170,13 @@ const SignInForm = () => {
               <div className="flex items-center justify-between mb-1">
                 <label
                   htmlFor="password"
-                  className="block text-sm font-medium text-gray-700"
+                  className="block text-sm font-medium text-foreground"
                 >
                   Password
                 </label>
               </div>
               <div className="relative">
-                <span className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none text-gray-400">
+                <span className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none text-muted-foreground">
                   <LockIcon className="size-4" />
                 </span>
                 <Input
@@ -190,7 +190,7 @@ const SignInForm = () => {
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute inset-y-0 right-0 flex items-center pr-3 text-gray-400 hover:text-gray-600"
+                  className="absolute inset-y-0 right-0 flex items-center pr-3 text-muted-foreground hover:text-muted-foreground"
                 >
                   {showPassword ? (
                     <EyeOffIcon className="size-4" />
@@ -212,10 +212,10 @@ const SignInForm = () => {
 
           <div className="relative my-4">
             <div className="absolute inset-0 flex items-center">
-              <div className="w-full border-t border-gray-200" />
+              <div className="w-full border-t border-border" />
             </div>
             <div className="relative flex justify-center text-xs uppercase">
-              <span className="bg-white px-2 text-gray-500">
+              <span className="bg-card px-2 text-muted-foreground">
                 Or continue with
               </span>
             </div>
@@ -225,7 +225,7 @@ const SignInForm = () => {
             type="button"
             onClick={handleGoogleSignIn}
             disabled={googleLoading}
-            className="flex w-full items-center justify-center gap-2 rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors"
+            className="flex w-full items-center justify-center gap-2 rounded-lg border border-border bg-card px-4 py-2 text-sm font-medium text-foreground hover:bg-muted transition-colors"
           >
             <FcGoogle className="size-5" />
             <span>
@@ -234,7 +234,7 @@ const SignInForm = () => {
           </button>
         </form>
 
-        <p className="text-center text-sm text-gray-600">
+        <p className="text-center text-sm text-muted-foreground">
           Don&apos;t have an account?{" "}
           <Link
             href="/sign-up"

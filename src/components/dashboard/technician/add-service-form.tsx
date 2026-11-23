@@ -238,12 +238,12 @@ const AddServiceForm = ({
       <input type="hidden" name="serviceMode" value={form.serviceMode} />
       <input type="hidden" name="image" value={imageUrl ?? ""} />
 
-      <div className="space-y-6 rounded-xl border border-slate-200 bg-white p-5 shadow-sm sm:p-6">
+      <div className="space-y-6 rounded-xl border border-border bg-card p-5 shadow-sm sm:p-6">
         <div>
-          <h3 className="text-base font-semibold text-slate-900">
+          <h3 className="text-base font-semibold text-foreground">
             Service details
           </h3>
-          <p className="mt-1 text-sm text-slate-500">
+          <p className="mt-1 text-sm text-muted-foreground">
             Customers will see this information on your service card.
           </p>
         </div>
@@ -319,7 +319,7 @@ const AddServiceForm = ({
             {errors.description ? (
               <p className="text-xs text-red-600">{errors.description}</p>
             ) : (
-              <p className="text-xs text-slate-400">
+              <p className="text-xs text-muted-foreground">
                 Minimum 20 characters · {form.description.trim().length}/20
               </p>
             )}
@@ -370,15 +370,15 @@ const AddServiceForm = ({
                     onClick={() => update("serviceMode", mode)}
                     className={`flex items-center gap-3 rounded-lg border p-3 text-left text-sm transition-colors ${
                       selected
-                        ? "border-blue-600 bg-blue-50 text-blue-700"
-                        : "border-slate-200 bg-white text-slate-600 hover:border-blue-300"
+                        ? "border-blue-600 bg-blue-50 text-blue-700 dark:bg-blue-500/15 dark:text-blue-300"
+                        : "border-border bg-card text-muted-foreground hover:border-blue-300"
                     }`}
                   >
                     <span
                       className={`flex size-5 items-center justify-center rounded-full border ${
                         selected
                           ? "border-blue-600 bg-blue-600 text-white"
-                          : "border-slate-300"
+                          : "border-border"
                       }`}
                     >
                       {selected && <CheckCircle2Icon className="size-3.5" />}
@@ -393,17 +393,17 @@ const AddServiceForm = ({
       </div>
 
       <div className="space-y-6">
-        <div className="rounded-xl border border-slate-200 bg-white p-5 shadow-sm">
-          <h3 className="text-base font-semibold text-slate-900">
+        <div className="rounded-xl border border-border bg-card p-5 shadow-sm">
+          <h3 className="text-base font-semibold text-foreground">
             Service image
           </h3>
-          <p className="mt-1 text-sm text-slate-500">
+          <p className="mt-1 text-sm text-muted-foreground">
             Upload a clear banner image (max 5 MB).
           </p>
 
           <label
             htmlFor="serviceImage"
-            className="mt-4 flex cursor-pointer flex-col items-center justify-center rounded-xl border-2 border-dashed border-slate-300 bg-slate-50 px-4 py-8 text-center transition-colors hover:border-blue-400 hover:bg-blue-50/50"
+            className="mt-4 flex cursor-pointer flex-col items-center justify-center rounded-xl border-2 border-dashed border-border bg-muted px-4 py-8 text-center transition-colors hover:border-blue-400 hover:bg-blue-50/50 dark:hover:bg-blue-500/10"
           >
             {imageUrl ? (
               <Image
@@ -417,14 +417,14 @@ const AddServiceForm = ({
             ) : (
               <ImagePlusIcon className="size-8 text-blue-500" />
             )}
-            <span className="mt-3 text-sm font-medium text-slate-700">
+            <span className="mt-3 text-sm font-medium text-foreground">
               {uploading
                 ? "Uploading to ImgBB..."
                 : imageUrl
                   ? "Change image"
                   : "Click to upload"}
             </span>
-            <span className="mt-1 text-xs text-slate-400">
+            <span className="mt-1 text-xs text-muted-foreground">
               PNG, JPG or WEBP
             </span>
             <input
@@ -439,20 +439,20 @@ const AddServiceForm = ({
             <p className="mt-2 text-xs text-red-600">{errors.image}</p>
           )}
           {imageName && (
-            <p className="mt-2 truncate text-xs text-slate-500">{imageName}</p>
+            <p className="mt-2 truncate text-xs text-muted-foreground">{imageName}</p>
           )}
         </div>
 
-        <div className="rounded-xl border border-slate-200 bg-white p-5 shadow-sm">
-          <h3 className="text-base font-semibold text-slate-900">Offered by</h3>
+        <div className="rounded-xl border border-border bg-card p-5 shadow-sm">
+          <h3 className="text-base font-semibold text-foreground">Offered by</h3>
           <div className="mt-4 space-y-3 text-sm">
             <div>
-              <p className="text-xs text-slate-400">Technician</p>
-              <p className="font-medium text-slate-800">{technicianName}</p>
+              <p className="text-xs text-muted-foreground">Technician</p>
+              <p className="font-medium text-foreground">{technicianName}</p>
             </div>
             <div>
-              <p className="text-xs text-slate-400">Email</p>
-              <p className="truncate font-medium text-slate-800">
+              <p className="text-xs text-muted-foreground">Email</p>
+              <p className="truncate font-medium text-foreground">
                 {technicianEmail}
               </p>
             </div>

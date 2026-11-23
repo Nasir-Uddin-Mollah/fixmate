@@ -16,7 +16,7 @@ const CATEGORIES = [
     slug: "Smartphone",
     icon: Smartphone,
     description: "Screen replacement, battery issues & board diagnostics",
-    color: "bg-blue-50 text-blue-600 hover:border-blue-300",
+    color: "bg-blue-50 text-blue-600 dark:bg-blue-500/15 dark:text-blue-300 hover:border-blue-300",
   },
   {
     title: "Laptop & PC",
@@ -69,10 +69,10 @@ const RepairCategoriesSection = () => {
         <h2 className="text-xs font-bold uppercase tracking-wider text-blue-600">
           Repair Categories
         </h2>
-        <p className="mt-2 text-3xl font-extrabold tracking-tight text-gray-900 sm:text-4xl">
+        <p className="mt-2 text-3xl font-extrabold tracking-tight text-foreground sm:text-4xl">
           What Needs Fixing Today?
         </p>
-        <p className="mt-3 text-sm text-gray-600 sm:text-base">
+        <p className="mt-3 text-sm text-muted-foreground sm:text-base">
           Choose from our range of certified repair services covering personal gadgets
           and home appliances.
         </p>
@@ -85,7 +85,7 @@ const RepairCategoriesSection = () => {
             <Link
               key={cat.title}
               href={`/services?category=${encodeURIComponent(cat.slug)}`}
-              className="group flex flex-col justify-between rounded-2xl border border-gray-200 bg-white p-6 shadow-sm hover:border-blue-500 hover:shadow-md transition-all"
+              className="group flex flex-col justify-between rounded-2xl border border-border bg-card p-6 shadow-sm hover:border-blue-500 hover:shadow-md transition-all"
             >
               <div>
                 <div
@@ -93,10 +93,10 @@ const RepairCategoriesSection = () => {
                 >
                   <Icon className="size-6" />
                 </div>
-                <h3 className="text-base font-bold text-gray-900 group-hover:text-blue-600 transition-colors">
+                <h3 className="text-base font-bold text-foreground group-hover:text-blue-600 transition-colors">
                   {cat.title}
                 </h3>
-                <p className="mt-1.5 text-xs text-gray-500 leading-relaxed">
+                <p className="mt-1.5 text-xs text-muted-foreground leading-relaxed">
                   {cat.description}
                 </p>
               </div>

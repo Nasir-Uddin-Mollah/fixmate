@@ -108,7 +108,7 @@ const BookingsTable = () => {
     return (
       <div className="space-y-4">
         {[0, 1, 2].map((row) => (
-          <div key={row} className="rounded-xl border border-slate-200 bg-white p-5">
+          <div key={row} className="rounded-xl border border-border bg-card p-5">
             <Skeleton className="h-5 w-56" />
             <Skeleton className="mt-4 h-4 w-full" />
             <Skeleton className="mt-2 h-4 w-3/4" />
@@ -120,7 +120,7 @@ const BookingsTable = () => {
 
   if (error) {
     return (
-      <div className="rounded-xl border border-red-200 bg-white p-8 text-center">
+      <div className="rounded-xl border border-red-200 bg-card p-8 text-center">
         <p className="text-sm font-medium text-red-600">{error}</p>
         <Button className="mt-4" onClick={() => void load()} variant="outline">
           <RefreshCwIcon className="size-4" />
@@ -132,10 +132,10 @@ const BookingsTable = () => {
 
   if (bookings.length === 0) {
     return (
-      <div className="rounded-xl border border-slate-200 bg-white p-10 text-center">
-        <WrenchIcon className="mx-auto size-10 text-slate-300" />
-        <h3 className="mt-4 text-base font-semibold text-slate-900">No bookings yet</h3>
-        <p className="mt-2 text-sm text-slate-500">
+      <div className="rounded-xl border border-border bg-card p-10 text-center">
+        <WrenchIcon className="mx-auto size-10 text-muted-foreground" />
+        <h3 className="mt-4 text-base font-semibold text-foreground">No bookings yet</h3>
+        <p className="mt-2 text-sm text-muted-foreground">
           Find a service you need and send your first repair request.
         </p>
         <Link href="/services" className="mt-5 inline-flex">
@@ -148,7 +148,7 @@ const BookingsTable = () => {
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-between">
-        <p className="text-sm text-slate-500">
+        <p className="text-sm text-muted-foreground">
           {bookings.length} {bookings.length === 1 ? "booking" : "bookings"}
         </p>
         <Button variant="outline" size="sm" onClick={() => void load()}>
@@ -163,7 +163,7 @@ const BookingsTable = () => {
         return (
           <article
             key={booking._id}
-            className="rounded-xl border border-slate-200 bg-white p-5 shadow-sm"
+            className="rounded-xl border border-border bg-card p-5 shadow-sm"
           >
             <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
               <div className="flex min-w-0 items-center gap-3">
@@ -178,10 +178,10 @@ const BookingsTable = () => {
                   />
                 )}
                 <div className="min-w-0">
-                  <h3 className="truncate font-semibold text-slate-900">
+                  <h3 className="truncate font-semibold text-foreground">
                     {booking.serviceTitle}
                   </h3>
-                  <p className="mt-1 text-xs text-slate-500">
+                  <p className="mt-1 text-xs text-muted-foreground">
                     {booking.category} · by {booking.technicianName}
                   </p>
                 </div>
@@ -199,7 +199,7 @@ const BookingsTable = () => {
               </div>
             </div>
 
-            <div className="mt-5 grid grid-cols-1 gap-3 text-sm text-slate-600 sm:grid-cols-2">
+            <div className="mt-5 grid grid-cols-1 gap-3 text-sm text-muted-foreground sm:grid-cols-2">
               <Detail icon={<CalendarDaysIcon className="size-4" />}>
                 Preferred: {formatDate(booking.preferredDate)}
               </Detail>
@@ -216,8 +216,8 @@ const BookingsTable = () => {
             </div>
 
             {booking.problemDescription && (
-              <p className="mt-3 rounded-lg bg-slate-50 p-3 text-sm text-slate-600">
-                <span className="font-semibold text-slate-700">Problem: </span>
+              <p className="mt-3 rounded-lg bg-muted p-3 text-sm text-muted-foreground">
+                <span className="font-semibold text-foreground">Problem: </span>
                 {booking.problemDescription}
               </p>
             )}
@@ -230,7 +230,7 @@ const BookingsTable = () => {
                   className={`rounded-full px-3 py-1 text-xs font-medium ${
                     index <= currentStep
                       ? "bg-blue-600 text-white"
-                      : "bg-slate-100 text-slate-400"
+                      : "bg-muted text-muted-foreground"
                   }`}
                 >
                   {step.label}
@@ -238,7 +238,7 @@ const BookingsTable = () => {
               ))}
             </div>
 
-            <div className="mt-4 flex flex-wrap gap-3 border-t border-slate-100 pt-4">
+            <div className="mt-4 flex flex-wrap gap-3 border-t border-border pt-4">
               <Link
                 href={`/services/${booking.serviceId}`}
                 className="text-sm font-medium text-blue-600 hover:text-blue-700"

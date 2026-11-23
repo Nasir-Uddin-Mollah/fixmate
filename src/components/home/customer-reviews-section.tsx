@@ -34,10 +34,10 @@ const CustomerReviewsSection = () => {
         <h2 className="text-xs font-bold uppercase tracking-wider text-blue-600">
           Customer Reviews
         </h2>
-        <p className="mt-2 text-3xl font-extrabold tracking-tight text-gray-900 sm:text-4xl">
+        <p className="mt-2 text-3xl font-extrabold tracking-tight text-foreground sm:text-4xl">
           Trusted by Thousands
         </p>
-        <p className="mt-3 text-sm text-gray-600">
+        <p className="mt-3 text-sm text-muted-foreground">
           Hear from people who repaired their phones, laptops, and appliances with FixMate.
         </p>
       </div>
@@ -46,7 +46,7 @@ const CustomerReviewsSection = () => {
         {TESTIMONIALS.map((t) => (
           <div
             key={t.name}
-            className="flex flex-col justify-between rounded-2xl border border-gray-200 bg-white p-6 shadow-sm"
+            className="flex flex-col justify-between rounded-2xl border border-border bg-card p-6 shadow-sm"
           >
             <div>
               <div className="flex items-center gap-1 text-amber-500 mb-3">
@@ -54,14 +54,14 @@ const CustomerReviewsSection = () => {
                   <Star key={i} className="size-4 fill-amber-500" />
                 ))}
               </div>
-              <p className="text-xs leading-relaxed text-gray-600 italic">
+              <p className="text-xs leading-relaxed text-muted-foreground italic">
                 &ldquo;{t.comment}&rdquo;
               </p>
             </div>
 
-            <div className="mt-6 border-t border-gray-100 pt-4">
-              <p className="text-sm font-bold text-gray-900">{t.name}</p>
-              <p className="text-xs text-gray-500">{t.area}</p>
+            <div className="mt-6 border-t border-border pt-4">
+              <p className="text-sm font-bold text-foreground">{t.name}</p>
+              <p className="text-xs text-muted-foreground">{t.area}</p>
               <span className="mt-1 inline-block text-[11px] font-semibold text-blue-600">
                 {t.role}
               </span>
