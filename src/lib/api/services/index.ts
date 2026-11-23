@@ -100,6 +100,48 @@ export const getPublicServices = async (
   return (await response.json()) as ServiceListResponse;
 };
 
+export const getAdminServices = async (): Promise<Service[]> => {
+  const token = await getJwtToken();
+
+  const response = await fetch(`${SERVER_URL}/api/services/admin/all`, {
+    headers: { Authorization: `Bearer ${token}` },
+    cache: "no-store",
+  });
+
+  if (!response.ok) {
+    throw new Error("Could not load submitted services.");
+  }
+
+  return (await response.json()) as Service[];
+};
+
+export const updateServiceApproval = async (
+  id: string,
+  approvalStatus: "approved" | "rejected",
+): Promise<Service> => {
+  const token = await getJwtToken();
+
+  const response = await fetch(
+    `${SERVER_URL}/api/services/${encodeURIComponent(id)}/approval`,
+    {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({ approvalStatus }),
+    },
+  );
+
+  const data = await response.json();
+
+  if (!response.ok) {
+    throw new Error(data?.message ?? "Could not update this service.");
+  }
+
+  return data as Service;
+};
+
 export const getServiceById = async (id: string): Promise<Service | null> => {
   const response = await fetch(
     `${SERVER_URL}/api/services/${encodeURIComponent(id)}`,

@@ -1,5 +1,5 @@
+import AdminServicesTable from "@/components/dashboard/admin/services-table";
 import PageHeader from "@/components/dashboard/page-header";
-import PlaceholderPanel from "@/components/dashboard/placeholder-panel";
 import { requireRole } from "@/lib/dashboard-auth";
 
 const AdminServicesPage = async () => {
@@ -11,10 +11,7 @@ const AdminServicesPage = async () => {
         title="Service Approval"
         description="Approve or reject technician submissions."
       />
-      <PlaceholderPanel
-        title="No pending reviews in this preview"
-        description="Submitted services will appear here with approve and reject actions, pending ones first."
-      />
+      <AdminServicesTable />
     </div>
   );
 };
