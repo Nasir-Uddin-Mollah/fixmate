@@ -1,5 +1,5 @@
 import PageHeader from "@/components/dashboard/page-header";
-import PlaceholderPanel from "@/components/dashboard/placeholder-panel";
+import RequestsTable from "@/components/dashboard/technician/requests-table";
 import { requireRole } from "@/lib/dashboard-auth";
 
 const TechnicianRequestsPage = async () => {
@@ -11,10 +11,7 @@ const TechnicianRequestsPage = async () => {
         title="Manage Requests"
         description="Accept jobs, start work, and set the final amount."
       />
-      <PlaceholderPanel
-        title="No requests to manage yet"
-        description="Customer repair requests for your services will show up here with status actions and filters."
-      />
+      <RequestsTable />
     </div>
   );
 };

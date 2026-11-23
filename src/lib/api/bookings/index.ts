@@ -50,7 +50,52 @@ export const createBooking = async (
   return data as Booking;
 };
 
-/** GET /api/bookings/my - only the signed-in customer's bookings. */
+export const getTechnicianBookings = async (): Promise<Booking[]> => {
+  const token = await getJwtToken();
+
+  const response = await fetch(`${SERVER_URL}/api/bookings/technician`, {
+    headers: { Authorization: `Bearer ${token}` },
+    cache: "no-store",
+  });
+
+  if (!response.ok) {
+    throw new Error("Could not load your requests.");
+  }
+
+  return (await response.json()) as Booking[];
+};
+
+export const updateBookingStatus = async (
+  id: string,
+  status: string,
+  finalAmount?: number,
+): Promise<Booking> => {
+  const token = await getJwtToken();
+
+  const response = await fetch(
+    `${SERVER_URL}/api/bookings/${encodeURIComponent(id)}/status`,
+    {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({
+        status,
+        ...(finalAmount !== undefined ? { finalAmount } : {}),
+      }),
+    },
+  );
+
+  const data = await response.json();
+
+  if (!response.ok) {
+    throw new Error(data?.message ?? "Could not update this request.");
+  }
+
+  return data as Booking;
+};
+
 export const getMyBookings = async (): Promise<Booking[]> => {
   const token = await getJwtToken();
 
@@ -66,7 +111,6 @@ export const getMyBookings = async (): Promise<Booking[]> => {
   return (await response.json()) as Booking[];
 };
 
-/** PATCH /api/bookings/:id/cancel - cancel a request before work starts. */
 export const cancelBooking = async (id: string): Promise<Booking> => {
   const token = await getJwtToken();
 
