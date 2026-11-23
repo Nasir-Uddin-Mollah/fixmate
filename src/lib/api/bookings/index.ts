@@ -130,3 +130,18 @@ export const cancelBooking = async (id: string): Promise<Booking> => {
 
   return data as Booking;
 };
+
+export const getAdminBookings = async (): Promise<Booking[]> => {
+  const token = await getJwtToken();
+
+  const response = await fetch(`${SERVER_URL}/api/bookings/admin/all`, {
+    headers: { Authorization: `Bearer ${token}` },
+    cache: "no-store",
+  });
+
+  if (!response.ok) {
+    throw new Error("Could not load bookings.");
+  }
+
+  return (await response.json()) as Booking[];
+};
