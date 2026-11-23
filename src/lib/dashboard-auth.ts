@@ -10,6 +10,9 @@ export type DashboardUser = {
   email: string;
   image: string | null;
   role: Role;
+  phone: string;
+  area: string;
+  bio: string;
 };
 
 const ROLES: Role[] = ["customer", "technician", "admin"];
@@ -30,6 +33,9 @@ export async function getDashboardUser(): Promise<DashboardUser | null> {
     email: user.email ?? "",
     image: user.image ?? null,
     role,
+    phone: user.phone ?? "",
+    area: user.area ?? "",
+    bio: user.bio ?? "",
   };
 }
 
