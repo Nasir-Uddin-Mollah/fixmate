@@ -44,7 +44,9 @@ const ServiceDetails = ({ id }: { id: string }) => {
           setService(data);
         }
       } catch (err) {
-        setError(err instanceof Error ? err.message : "Could not load this service.");
+        setError(
+          err instanceof Error ? err.message : "Could not load this service.",
+        );
       } finally {
         setLoading(false);
       }
@@ -80,7 +82,9 @@ const ServiceDetails = ({ id }: { id: string }) => {
     return (
       <div className="rounded-2xl border border-border bg-card p-12 text-center">
         <WrenchIcon className="mx-auto size-10 text-muted-foreground" />
-        <h1 className="mt-4 text-xl font-bold text-foreground">Service not found</h1>
+        <h1 className="mt-4 text-xl font-bold text-foreground">
+          Service not found
+        </h1>
         <p className="mt-2 text-sm text-muted-foreground">
           This service may have been removed or is no longer available.
         </p>
@@ -94,24 +98,34 @@ const ServiceDetails = ({ id }: { id: string }) => {
     );
   }
 
-  // Guests sign in first, then come back to this same page to book.
   const signInHref = `/sign-in?callbackUrl=${encodeURIComponent(`/services/${id}`)}`;
 
   const postedOn = new Intl.DateTimeFormat("en-BD", {
     dateStyle: "medium",
   }).format(new Date(service.createdAt));
 
-  // Clicking "Book this service" sends POST /api/bookings with all saved fields.
+  const today = new Date().toISOString().split("T")[0];
+  const userRole = session?.user?.role;
+  const isCustomer = !userRole || userRole === "customer";
+
   const handleBooking = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setBookingError("");
     setBookingSuccess(false);
+
+    const formData = new FormData(event.currentTarget);
+    const data = Object.fromEntries(formData.entries());
+
+    const description = String(data.problemDescription ?? "").trim();
+    if (description.length < 20) {
+      setBookingError(
+        "Problem description must be at least 20 characters long.",
+      );
+      return;
+    }
+
     setSubmitting(true);
-
     try {
-      const formData = new FormData(event.currentTarget);
-      const data = Object.fromEntries(formData.entries());
-
       await createBooking({
         ...data,
         status: "requested",
@@ -126,7 +140,9 @@ const ServiceDetails = ({ id }: { id: string }) => {
       });
     } catch (err) {
       const message =
-        err instanceof Error ? err.message : "Could not send your booking request.";
+        err instanceof Error
+          ? err.message
+          : "Could not send your booking request.";
       setBookingError(message);
       toast.add({
         title: "Booking failed",
@@ -149,7 +165,6 @@ const ServiceDetails = ({ id }: { id: string }) => {
       </Link>
 
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-[1.6fr_1fr]">
-        {/* Main content */}
         <article className="overflow-hidden rounded-2xl border border-border bg-card">
           <div className="relative h-64 bg-muted sm:h-80">
             {service.image ? (
@@ -175,20 +190,29 @@ const ServiceDetails = ({ id }: { id: string }) => {
               <h1 className="text-2xl font-extrabold text-foreground sm:text-3xl">
                 {service.title}
               </h1>
-              <p className="mt-2 text-sm text-muted-foreground">Posted on {postedOn}</p>
+              <p className="mt-2 text-sm text-muted-foreground">
+                Posted on {postedOn}
+              </p>
             </div>
 
             <div>
-              <h2 className="text-lg font-bold text-foreground">About this service</h2>
+              <h2 className="text-lg font-bold text-foreground">
+                About this service
+              </h2>
               <p className="mt-2 leading-relaxed whitespace-pre-line text-muted-foreground">
                 {service.description}
               </p>
             </div>
 
             <div>
-              <h2 className="text-lg font-bold text-foreground">Service details</h2>
+              <h2 className="text-lg font-bold text-foreground">
+                Service details
+              </h2>
               <div className="mt-3 grid grid-cols-1 gap-3 sm:grid-cols-2">
-                <Detail icon={<ClockIcon className="size-4" />} label="Estimated duration">
+                <Detail
+                  icon={<ClockIcon className="size-4" />}
+                  label="Estimated duration"
+                >
                   {service.estimatedDuration}
                 </Detail>
                 <Detail
@@ -203,10 +227,16 @@ const ServiceDetails = ({ id }: { id: string }) => {
                 >
                   {service.serviceMode}
                 </Detail>
-                <Detail icon={<MapPinIcon className="size-4" />} label="Service area">
+                <Detail
+                  icon={<MapPinIcon className="size-4" />}
+                  label="Service area"
+                >
                   {service.serviceArea}
                 </Detail>
-                <Detail icon={<BadgeCheckIcon className="size-4" />} label="Category">
+                <Detail
+                  icon={<BadgeCheckIcon className="size-4" />}
+                  label="Category"
+                >
                   {service.category}
                 </Detail>
               </div>
@@ -227,13 +257,14 @@ const ServiceDetails = ({ id }: { id: string }) => {
           </div>
         </article>
 
-        {/* Booking card */}
         <aside className="h-fit rounded-2xl border border-border bg-card p-6 lg:sticky lg:top-6">
           <p className="text-sm text-muted-foreground">Starting at</p>
           <p className="mt-1 text-3xl font-extrabold text-blue-600">
             ${service.basePrice}
           </p>
-          <p className="mt-1 text-xs text-muted-foreground">Final price confirmed after inspection</p>
+          <p className="mt-1 text-xs text-muted-foreground">
+            Final price confirmed after inspection
+          </p>
 
           {isPending ? (
             <p className="mt-6 rounded-lg bg-blue-100 px-5 py-3 text-center text-sm font-semibold text-blue-700">
@@ -246,21 +277,78 @@ const ServiceDetails = ({ id }: { id: string }) => {
             >
               Sign in to book
             </Link>
+          ) : !isCustomer ? (
+            <div className="mt-6 rounded-xl border border-amber-200 bg-amber-50 p-4 text-center dark:border-amber-900/30 dark:bg-amber-950/20">
+              <p className="text-sm font-semibold text-amber-800 dark:text-amber-400">
+                Only customers can request a repair
+              </p>
+              <p className="mt-1 text-xs text-amber-600 dark:text-amber-500">
+                You are currently signed in as a {session.user.role}. Repair
+                requests can only be made by customer accounts.
+              </p>
+            </div>
           ) : (
             <form onSubmit={handleBooking} className="mt-6 space-y-3">
-              {/* Hidden inputs put the service + customer data into FormData too. */}
-              <input type="hidden" name="serviceId" value={service._id} readOnly />
-              <input type="hidden" name="serviceTitle" value={service.title} readOnly />
-              <input type="hidden" name="serviceImage" value={service.image} readOnly />
-              <input type="hidden" name="category" value={service.category} readOnly />
-              <input type="hidden" name="basePrice" value={service.basePrice} readOnly />
-              <input type="hidden" name="technicianName" value={service.technicianName} readOnly />
-              <input type="hidden" name="technicianEmail" value={service.technicianEmail} readOnly />
-              <input type="hidden" name="customerName" value={session.user.name} readOnly />
-              <input type="hidden" name="customerEmail" value={session.user.email} readOnly />
+              <input
+                type="hidden"
+                name="serviceId"
+                value={service._id}
+                readOnly
+              />
+              <input
+                type="hidden"
+                name="serviceTitle"
+                value={service.title}
+                readOnly
+              />
+              <input
+                type="hidden"
+                name="serviceImage"
+                value={service.image}
+                readOnly
+              />
+              <input
+                type="hidden"
+                name="category"
+                value={service.category}
+                readOnly
+              />
+              <input
+                type="hidden"
+                name="basePrice"
+                value={service.basePrice}
+                readOnly
+              />
+              <input
+                type="hidden"
+                name="technicianName"
+                value={service.technicianName}
+                readOnly
+              />
+              <input
+                type="hidden"
+                name="technicianEmail"
+                value={service.technicianEmail}
+                readOnly
+              />
+              <input
+                type="hidden"
+                name="customerName"
+                value={session.user.name}
+                readOnly
+              />
+              <input
+                type="hidden"
+                name="customerEmail"
+                value={session.user.email}
+                readOnly
+              />
 
               <div>
-                <label htmlFor="customerPhone" className="text-xs font-semibold text-foreground">
+                <label
+                  htmlFor="customerPhone"
+                  className="text-xs font-semibold text-foreground"
+                >
                   Phone number
                 </label>
                 <input
@@ -274,7 +362,10 @@ const ServiceDetails = ({ id }: { id: string }) => {
               </div>
 
               <div>
-                <label htmlFor="address" className="text-xs font-semibold text-foreground">
+                <label
+                  htmlFor="address"
+                  className="text-xs font-semibold text-foreground"
+                >
                   Address
                 </label>
                 <input
@@ -288,7 +379,10 @@ const ServiceDetails = ({ id }: { id: string }) => {
               </div>
 
               <div>
-                <label htmlFor="preferredDate" className="text-xs font-semibold text-foreground">
+                <label
+                  htmlFor="preferredDate"
+                  className="text-xs font-semibold text-foreground"
+                >
                   Preferred date
                 </label>
                 <input
@@ -296,6 +390,7 @@ const ServiceDetails = ({ id }: { id: string }) => {
                   name="preferredDate"
                   type="date"
                   required
+                  min={today}
                   className="mt-1 w-full rounded-lg border border-border px-3 py-2 text-sm outline-none focus:border-blue-500"
                 />
               </div>
@@ -311,8 +406,9 @@ const ServiceDetails = ({ id }: { id: string }) => {
                   id="problemDescription"
                   name="problemDescription"
                   required
+                  minLength={20}
                   rows={3}
-                  placeholder="Tell the technician what is wrong..."
+                  placeholder="Tell the technician what is wrong (minimum 20 characters)..."
                   className="mt-1 w-full rounded-lg border border-border px-3 py-2 text-sm outline-none focus:border-blue-500"
                 />
               </div>
@@ -320,7 +416,7 @@ const ServiceDetails = ({ id }: { id: string }) => {
               <button
                 type="submit"
                 disabled={submitting}
-                className="w-full rounded-lg bg-blue-600 px-5 py-3 text-sm font-semibold text-white hover:bg-blue-700 disabled:opacity-60"
+                className="w-full rounded-lg bg-blue-600 px-5 py-3 text-sm font-semibold text-white hover:bg-blue-700 disabled:opacity-60 cursor-pointer"
               >
                 {submitting ? "Sending request..." : "Book this service"}
               </button>

@@ -100,6 +100,84 @@ export const getPublicServices = async (
   return (await response.json()) as ServiceListResponse;
 };
 
+export const updateService = async (
+  id: string,
+  payload: Partial<ServicePayload>,
+): Promise<Service> => {
+  const token = await getJwtToken();
+
+  const response = await fetch(
+    `${SERVER_URL}/api/services/${encodeURIComponent(id)}`,
+    {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify(payload),
+    },
+  );
+
+  const data = await response.json();
+
+  if (!response.ok) {
+    throw new Error(data?.message ?? "Could not update service.");
+  }
+
+  return data as Service;
+};
+
+export const deleteService = async (
+  id: string,
+): Promise<{ success: boolean; message: string }> => {
+  const token = await getJwtToken();
+
+  const response = await fetch(
+    `${SERVER_URL}/api/services/${encodeURIComponent(id)}`,
+    {
+      method: "DELETE",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    },
+  );
+
+  const data = await response.json();
+
+  if (!response.ok) {
+    throw new Error(data?.message ?? "Could not delete service.");
+  }
+
+  return data;
+};
+
+export const toggleServiceAvailability = async (
+  id: string,
+  isAvailable: boolean,
+): Promise<Service> => {
+  const token = await getJwtToken();
+
+  const response = await fetch(
+    `${SERVER_URL}/api/services/${encodeURIComponent(id)}`,
+    {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({ isAvailable }),
+    },
+  );
+
+  const data = await response.json();
+
+  if (!response.ok) {
+    throw new Error(data?.message ?? "Could not update service availability.");
+  }
+
+  return data as Service;
+};
+
 export const getAdminServices = async (): Promise<Service[]> => {
   const token = await getJwtToken();
 

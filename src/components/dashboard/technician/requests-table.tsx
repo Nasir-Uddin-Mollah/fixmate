@@ -11,7 +11,18 @@ import {
   RefreshCwIcon,
   UserRoundIcon,
   WrenchIcon,
+  XCircleIcon,
 } from "lucide-react";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -42,15 +53,19 @@ const STEPS = [
 ];
 
 const statusVariant = (status: string) => {
-  if (status === "rejected" || status === "cancelled") return "destructive" as const;
+  if (status === "rejected" || status === "cancelled")
+    return "destructive" as const;
   if (status === "completed" || status === "paid") return "default" as const;
-  if (status === "accepted" || status === "in-progress") return "secondary" as const;
+  if (status === "accepted" || status === "in-progress")
+    return "secondary" as const;
   return "outline" as const;
 };
 
 const formatDate = (value: string) =>
   value
-    ? new Intl.DateTimeFormat("en-BD", { dateStyle: "medium" }).format(new Date(value))
+    ? new Intl.DateTimeFormat("en-BD", { dateStyle: "medium" }).format(
+        new Date(value),
+      )
     : "—";
 
 const RequestsTable = () => {
@@ -60,6 +75,7 @@ const RequestsTable = () => {
   const [filter, setFilter] = useState<Filter>("all");
   const [busyId, setBusyId] = useState<string | null>(null);
   const [amounts, setAmounts] = useState<Record<string, string>>({});
+  const [bookingToReject, setBookingToReject] = useState<Booking | null>(null);
 
   const load = useCallback(async () => {
     setLoading(true);
@@ -93,7 +109,11 @@ const RequestsTable = () => {
     setBusyId(booking._id);
 
     try {
-      const updated = await updateBookingStatus(booking._id, status, finalAmount);
+      const updated = await updateBookingStatus(
+        booking._id,
+        status,
+        finalAmount,
+      );
       setRequests((current) =>
         current.map((item) => (item._id === updated._id ? updated : item)),
       );
@@ -101,16 +121,22 @@ const RequestsTable = () => {
         title:
           status === "accepted"
             ? "Job accepted"
-            : status === "in-progress"
-              ? "Work started"
-              : "Job completed",
+            : status === "rejected"
+              ? "Job rejected"
+              : status === "in-progress"
+                ? "Work started"
+                : "Job completed",
         description: `${booking.serviceTitle} is now ${status}.`,
         type: "success",
       });
     } catch (err) {
       const message =
         err instanceof Error ? err.message : "Could not update this request.";
-      toast.add({ title: "Update failed", description: message, type: "error" });
+      toast.add({
+        title: "Update failed",
+        description: message,
+        type: "error",
+      });
     } finally {
       setBusyId(null);
     }
@@ -136,7 +162,10 @@ const RequestsTable = () => {
     return (
       <div className="space-y-4">
         {[0, 1, 2].map((row) => (
-          <div key={row} className="rounded-xl border border-border bg-card p-5">
+          <div
+            key={row}
+            className="rounded-xl border border-border bg-card p-5"
+          >
             <Skeleton className="h-5 w-56" />
             <Skeleton className="mt-4 h-4 w-full" />
             <Skeleton className="mt-2 h-4 w-3/4" />
@@ -206,7 +235,9 @@ const RequestsTable = () => {
       )}
 
       {visible.map((booking) => {
-        const currentStep = STEPS.findIndex((step) => step.key === booking.status);
+        const currentStep = STEPS.findIndex(
+          (step) => step.key === booking.status,
+        );
         const busy = busyId === booking._id;
 
         return (
@@ -237,7 +268,9 @@ const RequestsTable = () => {
               </div>
 
               <div className="flex shrink-0 flex-wrap gap-2">
-                <Badge variant={statusVariant(booking.status)}>{booking.status}</Badge>
+                <Badge variant={statusVariant(booking.status)}>
+                  {booking.status}
+                </Badge>
                 {booking.status !== booking.paymentStatus && (
                   <Badge
                     variant={
@@ -294,14 +327,26 @@ const RequestsTable = () => {
               </span>
 
               {booking.status === "requested" && (
-                <Button
-                  size="sm"
-                  disabled={busy}
-                  onClick={() => void handleStatus(booking, "accepted")}
-                >
-                  <CheckCircle2Icon className="size-4" />
-                  {busy ? "Saving..." : "Accept Job"}
-                </Button>
+                <div className="flex items-center gap-2">
+                  <Button
+                    size="sm"
+                    disabled={busy}
+                    onClick={() => void handleStatus(booking, "accepted")}
+                  >
+                    <CheckCircle2Icon className="size-4" />
+                    {busy ? "Saving..." : "Accept Job"}
+                  </Button>
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    className="text-destructive hover:bg-destructive/10 hover:text-destructive"
+                    disabled={busy}
+                    onClick={() => setBookingToReject(booking)}
+                  >
+                    <XCircleIcon className="size-4" />
+                    Reject
+                  </Button>
+                </div>
               )}
 
               {booking.status === "accepted" && (
@@ -330,18 +375,23 @@ const RequestsTable = () => {
                       }))
                     }
                   />
-                  <Button size="sm" disabled={busy} onClick={() => handleComplete(booking)}>
+                  <Button
+                    size="sm"
+                    disabled={busy}
+                    onClick={() => handleComplete(booking)}
+                  >
                     <CheckCircle2Icon className="size-4" />
                     {busy ? "Saving..." : "Complete Job"}
                   </Button>
                 </div>
               )}
 
-              {booking.status === "completed" && booking.paymentStatus !== "paid" && (
-                <span className="text-sm font-medium text-amber-600 dark:text-amber-400">
-                  Waiting for payment →
-                </span>
-              )}
+              {booking.status === "completed" &&
+                booking.paymentStatus !== "paid" && (
+                  <span className="text-sm font-medium text-amber-600 dark:text-amber-400">
+                    Waiting for payment →
+                  </span>
+                )}
 
               {booking.paymentStatus === "paid" && (
                 <span className="text-sm font-medium text-emerald-600 dark:text-emerald-400">
@@ -352,6 +402,40 @@ const RequestsTable = () => {
           </article>
         );
       })}
+
+      {bookingToReject && (
+        <AlertDialog
+          open={Boolean(bookingToReject)}
+          onOpenChange={(open) => !open && setBookingToReject(null)}
+        >
+          <AlertDialogContent>
+            <AlertDialogHeader>
+              <AlertDialogTitle>Reject Job Request?</AlertDialogTitle>
+              <AlertDialogDescription>
+                Are you sure you want to reject the booking request for &ldquo;
+                {bookingToReject.serviceTitle}&rdquo; from{" "}
+                {bookingToReject.customerName}?
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+              <AlertDialogCancel disabled={busyId === bookingToReject._id}>
+                Cancel
+              </AlertDialogCancel>
+              <AlertDialogAction
+                variant="destructive"
+                disabled={busyId === bookingToReject._id}
+                onClick={async () => {
+                  const target = bookingToReject;
+                  setBookingToReject(null);
+                  await handleStatus(target, "rejected");
+                }}
+              >
+                {busyId === bookingToReject._id ? "Rejecting..." : "Reject Job"}
+              </AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
+      )}
     </div>
   );
 };

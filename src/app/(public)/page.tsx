@@ -1,4 +1,5 @@
 import CustomerReviewsSection from "@/components/home/customer-reviews-section";
+import FeaturedServicesSection from "@/components/home/featured-services-section";
 import HeroSection from "@/components/home/hero-section";
 import HowItWorksSection from "@/components/home/how-it-works-section";
 import RepairCategoriesSection from "@/components/home/repair-categories-section";
@@ -10,6 +11,7 @@ const HomePage = () => {
     <div className="flex flex-col gap-20 pb-20">
       <HeroSection />
       <RepairCategoriesSection />
+      <FeaturedServicesSection />
       <HowItWorksSection />
       <WhyFixMateSection />
       <CustomerReviewsSection />
