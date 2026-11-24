@@ -22,7 +22,7 @@ export type BookingPayload = {
   paymentStatus: string;
 };
 
-export type Booking = BookingPayload & { _id: string };
+export type Booking = BookingPayload & { _id: string; createdAt?: string };
 
 export const createBooking = async (
   payload: Record<string, FormDataEntryValue | number>,
