@@ -53,6 +53,7 @@ const BookingsTable = () => {
   const [error, setError] = useState<string | null>(null);
   const [cancelId, setCancelId] = useState<string | null>(null);
   const [cancelling, setCancelling] = useState(false);
+  const [payingId, setPayingId] = useState<string | null>(null);
 
   const load = useCallback(async () => {
     setLoading(true);
@@ -101,6 +102,30 @@ const BookingsTable = () => {
       toast.add({ title: "Cancellation failed", description: message, type: "error" });
     } finally {
       setCancelling(false);
+    }
+  };
+
+  const handlePay = async (booking: Booking) => {
+    setPayingId(booking._id);
+    try {
+      const res = await fetch("/api/checkout_sessions", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          bookingId: booking._id,
+          serviceTitle: booking.serviceTitle,
+          finalAmount: booking.finalAmount,
+          customerEmail: booking.customerEmail,
+        }),
+      });
+
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || "Could not start payment");
+      if (data.url) window.location.assign(data.url);
+    } catch (err) {
+      const message = err instanceof Error ? err.message : "Could not start payment.";
+      toast.add({ title: "Payment failed to start", description: message, type: "error" });
+      setPayingId(null);
     }
   };
 
@@ -189,13 +214,15 @@ const BookingsTable = () => {
 
               <div className="flex shrink-0 flex-wrap gap-2">
                 <Badge variant={statusVariant(booking.status)}>{booking.status}</Badge>
-                <Badge
-                  variant={
-                    booking.paymentStatus === "paid" ? "default" : "outline"
-                  }
-                >
-                  {booking.paymentStatus}
-                </Badge>
+                {booking.status !== booking.paymentStatus && (
+                  <Badge
+                    variant={
+                      booking.paymentStatus === "paid" ? "default" : "outline"
+                    }
+                  >
+                    {booking.paymentStatus}
+                  </Badge>
+                )}
               </div>
             </div>
 
@@ -238,13 +265,23 @@ const BookingsTable = () => {
               ))}
             </div>
 
-            <div className="mt-4 flex flex-wrap gap-3 border-t border-border pt-4">
+            <div className="mt-4 flex flex-wrap items-center gap-3 border-t border-border pt-4">
               <Link
                 href={`/services/${booking.serviceId}`}
                 className="text-sm font-medium text-blue-600 hover:text-blue-700"
               >
                 View service →
               </Link>
+              {booking.status === "completed" && booking.paymentStatus === "unpaid" && (
+                <Button
+                  size="sm"
+                  className="bg-blue-600 hover:bg-blue-700"
+                  onClick={() => void handlePay(booking)}
+                  disabled={payingId === booking._id}
+                >
+                  {payingId === booking._id ? "Redirecting..." : `Pay $${booking.finalAmount}`}
+                </Button>
+              )}
               {(booking.status === "requested" || booking.status === "accepted") && (
                 <button
                   type="button"

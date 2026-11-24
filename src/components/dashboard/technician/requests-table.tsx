@@ -238,13 +238,15 @@ const RequestsTable = () => {
 
               <div className="flex shrink-0 flex-wrap gap-2">
                 <Badge variant={statusVariant(booking.status)}>{booking.status}</Badge>
-                <Badge
-                  variant={
-                    booking.paymentStatus === "paid" ? "default" : "outline"
-                  }
-                >
-                  {booking.paymentStatus}
-                </Badge>
+                {booking.status !== booking.paymentStatus && (
+                  <Badge
+                    variant={
+                      booking.paymentStatus === "paid" ? "default" : "outline"
+                    }
+                  >
+                    {booking.paymentStatus}
+                  </Badge>
+                )}
               </div>
             </div>
 
@@ -335,9 +337,15 @@ const RequestsTable = () => {
                 </div>
               )}
 
-              {(booking.status === "completed" || booking.status === "paid") && (
-                <span className="text-sm font-medium text-muted-foreground">
+              {booking.status === "completed" && booking.paymentStatus !== "paid" && (
+                <span className="text-sm font-medium text-amber-600 dark:text-amber-400">
                   Waiting for payment →
+                </span>
+              )}
+
+              {booking.paymentStatus === "paid" && (
+                <span className="text-sm font-medium text-emerald-600 dark:text-emerald-400">
+                  Payment received
                 </span>
               )}
             </div>

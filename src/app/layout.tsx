@@ -20,6 +20,7 @@ const RootLayout = ({ children }: { children: React.ReactNode }) => {
   return (
     <html
       lang="en"
+      data-scroll-behavior="smooth"
       suppressHydrationWarning
       className={`${fontSans.variable} h-full scroll-smooth scroll-pt-16 antialiased motion-reduce:scroll-auto`}
     >
