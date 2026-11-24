@@ -81,7 +81,7 @@ const ServicesExplorer = ({ initialCategory = "" }: { initialCategory?: string }
             placeholder="Search services..."
             className="h-10 w-full rounded-lg border border-border px-3 text-sm"
           />
-          <button className="shrink-0 rounded-lg bg-blue-600 px-4 text-sm font-medium text-white hover:bg-blue-700">
+          <button type="submit" className="shrink-0 rounded-lg bg-blue-600 px-4 text-sm font-medium text-white hover:bg-blue-700">
             Search
           </button>
         </form>
