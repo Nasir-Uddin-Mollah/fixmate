@@ -1,10 +1,13 @@
 import { NextResponse } from "next/server";
-import { stripe } from "@/lib/stripe";
+import { getStripe } from "@/lib/stripe";
 import { MongoClient, ObjectId } from "mongodb";
 
-const client = new MongoClient(process.env.MONGODB_URI);
+let client;
 let dbPromise;
 const getDb = async () => {
+  const uri = process.env.MONGODB_URI;
+  if (!uri) throw new Error("MONGODB_URI is missing");
+  if (!client) client = new MongoClient(uri);
   if (!dbPromise) dbPromise = client.connect().then((c) => c.db("fixmate"));
   return dbPromise;
 };
@@ -44,7 +47,7 @@ export async function POST(req) {
 
   let event;
   try {
-    event = stripe.webhooks.constructEvent(
+    event = getStripe().webhooks.constructEvent(
       body,
       signature,
       process.env.STRIPE_WEBHOOK_SECRET

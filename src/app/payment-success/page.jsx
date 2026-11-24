@@ -3,7 +3,7 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import { connection } from "next/server";
 import { CheckCircle2Icon, ReceiptTextIcon } from "lucide-react";
-import { stripe } from "@/lib/stripe";
+import { getStripe } from "@/lib/stripe";
 
 async function PaymentSuccessContent({ searchParams }) {
   await connection();
@@ -12,7 +12,7 @@ async function PaymentSuccessContent({ searchParams }) {
 
   let session;
   try {
-    session = await stripe.checkout.sessions.retrieve(session_id, {
+    session = await getStripe().checkout.sessions.retrieve(session_id, {
       expand: ["line_items", "payment_intent", "customer_details"],
     });
   } catch {
