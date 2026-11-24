@@ -49,5 +49,29 @@ export const auth = betterAuth({
       maxAge: 5 * 24 * 60 * 60,
     },
   },
+  databaseHooks: {
+    user: {
+      update: {
+        after: async (user) => {
+          try {
+            const name = String(user.name ?? "").trim();
+            const email = String(user.email ?? "").trim();
+            if (!name || !email) return;
+
+            const bookings = db.collection("bookings");
+            const services = db.collection("services");
+
+            await Promise.all([
+              bookings.updateMany({ customerEmail: email }, { $set: { customerName: name } }),
+              bookings.updateMany({ technicianEmail: email }, { $set: { technicianName: name } }),
+              services.updateMany({ technicianEmail: email }, { $set: { technicianName: name } }),
+            ]);
+          } catch (error) {
+            console.error("Failed to sync user name to history:", error);
+          }
+        },
+      },
+    },
+  },
   plugins: [jwt()],
 });
