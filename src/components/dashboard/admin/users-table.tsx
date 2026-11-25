@@ -44,8 +44,9 @@ const formatDate = (value?: string) => {
   return new Intl.DateTimeFormat("en-BD", { dateStyle: "medium" }).format(date);
 };
 
-const UsersTable = () => {
+const UsersTable = ({ currentUserEmail }: { currentUserEmail: string }) => {
   const [users, setUsers] = useState<AdminUser[]>([]);
+  const selfEmail = currentUserEmail.trim().toLowerCase();
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [busyId, setBusyId] = useState<string | null>(null);
@@ -194,26 +195,30 @@ const UsersTable = () => {
                     </TableCell>
                     <TableCell>
                       <div className="flex justify-end">
-                        <Select
-                          value={user.role}
-                          onValueChange={(value) =>
-                            void handleRoleChange(user, value as AdminUser["role"])
-                          }
-                          disabled={busy}
-                        >
-                          <SelectTrigger className="w-36" aria-label={`Role for ${user.name}`}>
-                            <SelectValue />
-                          </SelectTrigger>
-                          <SelectContent>
-                            <SelectGroup>
-                              {ROLES.map((role) => (
-                                <SelectItem key={role} value={role}>
-                                  {role}
-                                </SelectItem>
-                              ))}
-                            </SelectGroup>
-                          </SelectContent>
-                        </Select>
+                        {selfEmail && user.email.trim().toLowerCase() === selfEmail ? (
+                          <span className="text-xs text-muted-foreground">Your account</span>
+                        ) : (
+                          <Select
+                            value={user.role}
+                            onValueChange={(value) =>
+                              void handleRoleChange(user, value as AdminUser["role"])
+                            }
+                            disabled={busy}
+                          >
+                            <SelectTrigger className="w-36" aria-label={`Role for ${user.name}`}>
+                              <SelectValue />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectGroup>
+                                {ROLES.map((role) => (
+                                  <SelectItem key={role} value={role}>
+                                    {role}
+                                  </SelectItem>
+                                ))}
+                              </SelectGroup>
+                            </SelectContent>
+                          </Select>
+                        )}
                       </div>
                     </TableCell>
                   </TableRow>
