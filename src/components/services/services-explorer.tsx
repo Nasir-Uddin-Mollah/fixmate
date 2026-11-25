@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { getPublicServices, type Service, type ServiceQuery } from "@/lib/api/services";
 
 const CATEGORIES = [
@@ -16,26 +17,62 @@ const CATEGORIES = [
 ];
 
 const MODES = ["Home Visit", "Shop Drop-off"];
+const SORTS = ["newest", "price_asc", "price_desc", "title"] as const;
 
 const selectClass =
   "h-10 rounded-lg border border-border bg-card px-3 text-sm text-foreground";
 
-const ServicesExplorer = ({ initialCategory = "" }: { initialCategory?: string }) => {
-  const [searchText, setSearchText] = useState("");
-  const [q, setQ] = useState("");
-  const [category, setCategory] = useState(initialCategory);
-  const [mode, setMode] = useState("");
-  const [sort, setSort] = useState<ServiceQuery["sort"]>("newest");
-  const [page, setPage] = useState(1);
+const parseSort = (value: string | null): ServiceQuery["sort"] => {
+  return SORTS.includes(value as (typeof SORTS)[number])
+    ? (value as ServiceQuery["sort"])
+    : "newest";
+};
 
-  // Result state
+const parsePage = (value: string | null) => {
+  const page = Number(value);
+  return Number.isFinite(page) && page > 0 ? Math.floor(page) : 1;
+};
+
+const ServicesExplorer = () => {
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+
+  const q = searchParams.get("q")?.trim() || "";
+  const category = searchParams.get("category") || "";
+  const mode = searchParams.get("serviceMode") || "";
+  const sort = parseSort(searchParams.get("sort"));
+  const page = parsePage(searchParams.get("page"));
+
+  const [searchText, setSearchText] = useState(q);
   const [services, setServices] = useState<Service[]>([]);
   const [totalPages, setTotalPages] = useState(0);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [reload, setReload] = useState(0);
 
-  // Any filter changes -> fetch again
+  useEffect(() => {
+    setSearchText(q);
+  }, [q]);
+
+  const updateParams = (updates: Record<string, string | number | undefined>) => {
+    const params = new URLSearchParams(searchParams.toString());
+
+    for (const [key, value] of Object.entries(updates)) {
+      const text = String(value ?? "").trim();
+      const isDefault =
+        !text ||
+        (key === "sort" && text === "newest") ||
+        (key === "page" && text === "1");
+
+      if (isDefault) params.delete(key);
+      else params.set(key, text);
+    }
+
+    const query = params.toString();
+    router.replace(query ? `${pathname}?${query}` : pathname, { scroll: false });
+  };
+
   useEffect(() => {
     async function load() {
       setLoading(true);
@@ -71,8 +108,7 @@ const ServicesExplorer = ({ initialCategory = "" }: { initialCategory?: string }
           className="flex flex-1 gap-2"
           onSubmit={(event) => {
             event.preventDefault();
-            setQ(searchText.trim());
-            setPage(1);
+            updateParams({ q: searchText.trim(), page: 1 });
           }}
         >
           <input
@@ -89,8 +125,7 @@ const ServicesExplorer = ({ initialCategory = "" }: { initialCategory?: string }
         <select
           value={category}
           onChange={(event) => {
-            setCategory(event.target.value);
-            setPage(1);
+            updateParams({ category: event.target.value, page: 1 });
           }}
           className={selectClass}
         >
@@ -105,8 +140,7 @@ const ServicesExplorer = ({ initialCategory = "" }: { initialCategory?: string }
         <select
           value={mode}
           onChange={(event) => {
-            setMode(event.target.value);
-            setPage(1);
+            updateParams({ serviceMode: event.target.value, page: 1 });
           }}
           className={selectClass}
         >
@@ -121,8 +155,7 @@ const ServicesExplorer = ({ initialCategory = "" }: { initialCategory?: string }
         <select
           value={sort}
           onChange={(event) => {
-            setSort(event.target.value as ServiceQuery["sort"]);
-            setPage(1);
+            updateParams({ sort: event.target.value, page: 1 });
           }}
           className={selectClass}
         >
@@ -207,7 +240,7 @@ const ServicesExplorer = ({ initialCategory = "" }: { initialCategory?: string }
         <div className="flex items-center justify-center gap-4">
           <button
             disabled={page === 1}
-            onClick={() => setPage(page - 1)}
+            onClick={() => updateParams({ page: page - 1 })}
             className="rounded-lg border px-4 py-2 text-sm disabled:opacity-40"
           >
             Previous
@@ -217,7 +250,7 @@ const ServicesExplorer = ({ initialCategory = "" }: { initialCategory?: string }
           </span>
           <button
             disabled={page === totalPages}
-            onClick={() => setPage(page + 1)}
+            onClick={() => updateParams({ page: page + 1 })}
             className="rounded-lg border px-4 py-2 text-sm disabled:opacity-40"
           >
             Next

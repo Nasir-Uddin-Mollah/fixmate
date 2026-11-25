@@ -11,7 +11,14 @@ export type AdminUser = {
   createdAt?: string;
 };
 
-/** GET /api/users/admin/all - every account (admin only). */
+export type UpdateProfilePayload = {
+  name: string;
+  phone: string;
+  area: string;
+  bio: string;
+  image: string | null;
+};
+
 export const getAdminUsers = async (): Promise<AdminUser[]> => {
   const token = await getJwtToken();
 
@@ -27,7 +34,31 @@ export const getAdminUsers = async (): Promise<AdminUser[]> => {
   return (await response.json()) as AdminUser[];
 };
 
-/** PATCH /api/users/:id/role - change a user's role (admin only). */
+export const updateMyProfile = async (
+  payload: UpdateProfilePayload,
+): Promise<Record<string, unknown>> => {
+  const token = await getJwtToken();
+
+  const response = await fetch(`${SERVER_URL}/api/users/profile`, {
+    method: "PATCH",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify(payload),
+  });
+
+  const data = await response.json().catch(() => ({}));
+
+  if (!response.ok) {
+    throw new Error(
+      (data as { message?: string })?.message ?? "Could not update profile.",
+    );
+  }
+
+  return data as Record<string, unknown>;
+};
+
 export const updateUserRole = async (
   id: string,
   role: AdminUser["role"],

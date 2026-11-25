@@ -3,6 +3,7 @@
 import { useState, type FormEvent } from "react";
 import Image from "next/image";
 import { CameraIcon, Loader2Icon, SaveIcon } from "lucide-react";
+import { useRouter } from "next/navigation";
 import { authClient, useSession } from "@/app/lib/auth-client";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -10,6 +11,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "@/components/ui/toast";
+import { updateMyProfile } from "@/lib/api/users";
 import type { DashboardUser } from "@/lib/dashboard-auth";
 
 const IMGBB_API_KEY = process.env.NEXT_PUBLIC_IMGBB_API_KEY;
@@ -53,6 +55,7 @@ type FormErrors = Partial<Record<keyof FormState | "image", string>>;
 
 const ProfileForm = ({ user }: { user: DashboardUser }) => {
   const { refetch } = useSession();
+  const router = useRouter();
   const [form, setForm] = useState<FormState>({
     name: user.name,
     phone: user.phone,
@@ -138,14 +141,18 @@ const ProfileForm = ({ user }: { user: DashboardUser }) => {
     setSaving(true);
 
     try {
-      await authClient.updateUser({
+      await updateMyProfile({
         name,
         image: image || null,
         phone,
         area,
         bio,
       });
+      await authClient.getSession({
+        query: { disableCookieCache: true },
+      });
       await refetch();
+      router.refresh();
       toast.add({
         title: "Profile updated",
         description: "Your details have been saved.",

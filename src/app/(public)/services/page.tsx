@@ -2,16 +2,7 @@ import { Suspense } from "react";
 import { WrenchIcon } from "lucide-react";
 import ServicesExplorer from "@/components/services/services-explorer";
 
-type PageProps = {
-  searchParams: Promise<{ category?: string }>;
-};
-
-const ServicesContent = async ({ searchParams }: PageProps) => {
-  const { category } = await searchParams;
-  return <ServicesExplorer initialCategory={category} />;
-};
-
-const ServicesPage = ({ searchParams }: PageProps) => {
+const ServicesPage = () => {
   return (
     <div className="bg-muted/60">
       <section className="border-b border-border bg-card">
@@ -33,7 +24,7 @@ const ServicesPage = ({ searchParams }: PageProps) => {
         <Suspense
           fallback={<p className="py-16 text-center text-muted-foreground">Loading services...</p>}
         >
-          <ServicesContent searchParams={searchParams} />
+          <ServicesExplorer />
         </Suspense>
       </section>
     </div>
