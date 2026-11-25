@@ -4,6 +4,7 @@ import { redirect } from "next/navigation";
 import { connection } from "next/server";
 import { CheckCircle2Icon, ReceiptTextIcon } from "lucide-react";
 import { getStripe } from "@/lib/stripe";
+import { fulfillPaymentFromSession } from "@/lib/fulfill-payment";
 
 async function PaymentSuccessContent({ searchParams }) {
   await connection();
@@ -20,6 +21,14 @@ async function PaymentSuccessContent({ searchParams }) {
   }
 
   if (session.status !== "complete") redirect("/");
+
+  if (session.payment_status === "paid") {
+    try {
+      await fulfillPaymentFromSession(session);
+    } catch (err) {
+      console.error("Payment verification/persist failed:", err);
+    }
+  }
 
   const amount = ((session.amount_total || 0) / 100).toFixed(2);
   const email = session.customer_details?.email || session.metadata?.customerEmail || "";

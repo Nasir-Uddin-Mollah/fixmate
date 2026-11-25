@@ -5,10 +5,15 @@ const SERVER_URL = process.env.NEXT_PUBLIC_SERVER_URL;
 export type Payment = {
   _id: string;
   bookingId: string;
+  serviceTitle?: string;
+  customerName?: string;
   customerEmail: string;
-  transactionId: string;
+  technicianName?: string;
+  technicianEmail?: string;
   amount: number;
   currency?: string;
+  transactionId: string;
+  stripeSessionId?: string;
   paymentStatus: "paid";
   paidAt?: string;
 };
